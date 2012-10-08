@@ -7,20 +7,20 @@ Func AltGetMAC()
 	RunWait('"' & @ComSpec & '" /k ' & 'ipconfig /all', @SystemDir,@SW_SHOW) ; RunWait starts the indicated program and waits until it loads before executing other code.
 EndFunc
 
-Func ResetNetwork() ;needs to be converted to loop >.>
-   $CMD1 = 'netsh winsock reset'
-   $CMD2 = 'netsh winsock reset catalog'
-   $CMD3 = 'netsh interface ip reset c:\int-resetlog.txt'
-   $CMD5 = 'netsh interface ip delete arpcache'
-   $CMD6 = 'ipconfig /flushdns' ;these things are what is being ran in cmd
-   $CMD7 = 'ipconfig /registerdns'
-
-   RunWait('"' & @ComSpec & '" /c ' & $CMD1, @SystemDir,@SW_HIDE) ;@ComSpec is cmd prompt, and /c is for closing it
-   RunWait('"' & @ComSpec & '" /c ' & $CMD2, @SystemDir,@SW_HIDE) ;@SW_HIDE is a autoit command that hides the window, starts it hidden.
-   RunWait('"' & @ComSpec & '" /c ' & $CMD3, @SystemDir,@SW_HIDE) ;@SystemDir is the working directory (not the path to the file)
-   RunWait('"' & @ComSpec & '" /c ' & $CMD5, @SystemDir,@SW_HIDE)
-   RunWait('"' & @ComSpec & '" /c ' & $CMD6, @SystemDir,@SW_HIDE)
-   RunWait('"' & @ComSpec & '" /c ' & $CMD7, @SystemDir,@SW_HIDE)
+Func ResetNetwork() 
+	local $Data = 'netsh winsock reset|' & _
+				 'netsh winsock reset catalog|' & _
+				 'netsh interface ip reset c:\int-resetlog.txt|' & _
+				 'netsh interface ip delete arpcache|' & _
+				 'ipconfig /flushdns|' & _
+				 'ipconfig /registerdns'
+	local $CMD = StringSplit($Data,"|")
+	
+	If IsArray($CMD) Then ;checks if $CMD is an array then runs the loop.
+		For $i = 1 to $CMD[0] ;looping from 1 to the end of the array because CMD[0] is the length from string split
+				RunWait('"' & @ComSpec & '" /c ' & $CMD[$i], @SystemDir,@SW_HIDE) ;@ComSpec is cmd prompt, and /c is for closing it. @SW_HIDE is a autoit command that hides the window, starts it hidden. @SystemDir is the working directory (not the path to the file).
+		Next
+	EndIf  
 EndFunc
 
 Func AddRemovePrograms()

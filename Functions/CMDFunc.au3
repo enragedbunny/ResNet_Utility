@@ -8,6 +8,7 @@ Func AltGetMAC()
 EndFunc
 
 Func ResetNetwork() 
+	local $i
 	local $Data = 'netsh winsock reset|' & _
 				 'netsh winsock reset catalog|' & _
 				 'netsh interface ip reset c:\int-resetlog.txt|' & _
@@ -28,13 +29,13 @@ Func AddRemovePrograms()
 EndFunc
 
 Func RepairFirewall()
-   $CMD1 = 'rundll32.exe setupapi.dll,InstallHinfSection Ndi-Steelhead 132 %windir%\inf\netrass.inf' ;changing the initialization
+   local $CMD1 = 'rundll32.exe setupapi.dll,InstallHinfSection Ndi-Steelhead 132 %windir%\inf\netrass.inf' ;changing the initialization
 
    RunWait('"' & @ComSpec & '" /c ' & $CMD1, @SystemDir,@SW_HIDE)
 EndFunc
 
 Func ResetFirewall()
-   $CMD1 = 'netsh firewall reset' ;changing again...
+   local $CMD1 = 'netsh firewall reset'
 
    RunWait('"' & @ComSpec & '" /c ' & $CMD1, @SystemDir,@SW_HIDE)
 EndFunc

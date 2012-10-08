@@ -152,18 +152,8 @@ While 1
 			FixFileAssociations() ;CMDFunc Line 114
 		Case $btnAddRemovePrograms ;same (i'm saying that in all of these seperate cases when the button is clicked it will run the proceeding function)
 			AddRemovePrograms() ;CMDFunc Line 26
-			
-			;This is where we need to start figuring things out start here. I (ABV) don't know if we even need the SmartFunc for this program.
-			
-		Case $SMARTData ;This is the first instance of calling the SMARTFunc we need to figure out what is going on with this case... this should be our first challenge to figure out!
-			; I (JK) will clean up this code even more than it is now (we shouldn't have to make changes to the code in SMARTFunc.au3, atleast not at this time
-			; I recommend that nobody even worry about it or the code below this point unless you are just curious, until I get it fixed.
-			$smartData = _GetSmartData($drive) ;This is running GetSmartData
-			If $smartData <> -1 then
-				_arrayDisplay($SmartData,"S.M.A.R.T. Data for Drive " & $drive)
-			Else
-				Msgbox(0,"",$drive & " may not be S.M.A.R.T. Capable")
-			EndIf
+		Case $SMARTData 
+			Initialize_SMART()
 	EndSwitch
 WEnd ;Case SMARTData is the last case in this while loop, Also it is the only one that uses the other Class(Func) SMARTFunc, so if we can figure out
 ; if we really need SMARTFunc then we can have this entire 168 lines of code complete.

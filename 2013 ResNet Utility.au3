@@ -19,7 +19,10 @@
 #include <Functions\SMARTFunc.au3> ; A function for getting smart data, not my own code
 #include <Functions\SystemInfoFunc.au3> ;My function for getting system info
 #RequireAdmin ;runs this program as admin, and anything it calls, has admin as well, needed for command prompt scripts
-$CurrentVersion = "0.3.0" ; Current version of the software
+local $CurrentVersion = "0.3.0" ; Current version of the software
+local $Tab1,$Tab2,$Tab3 ; Declare Tab item variables
+local $OSEd,$SyTy,$SePa,$WaBr,$WaMa,$WiBr,$WiMa,$Bran,$Seri,$HsHf,$Memo,$Mode ; Declare variables to store system information
+local $Workgroup ; Declare variable to store workgroup in
 
 ; Creates GUI, sets name in title bar and icon.
 GUICreate("ResNet Utility " & $CurrentVersion, 710, 235) ;Created the GUI form and the size
@@ -100,24 +103,23 @@ $Tab1 = GUICtrlCreateTabItem("Info") ;Creating the info tab
    GUICtrlSetColor($Memo,0x0000FF)
    GUICtrlSetColor($Mode,0x0000FF)
 
-
-GUICtrlCreateTabItem("Repair")
+$Tab2 = GUICtrlCreateTabItem("Repair")
    ;Create Buttons to call repair functions (in the repair tab) The On-Click part is handled by the Case statement lower down
-   $ResNetwork = GUICtrlCreateButton("Reset Network",87,58,130) ; button that will perform a variety of network connection repair commands
-   $RepFirewall = GUICtrlCreateButton("Repair Firewall",87,90,130) ; button to repair the windows firewall
-   $ResFirewall = GUICtrlCreateButton("Reset Firewall",87,122,130) ; button to reset the windows firewall settings
-   $RepWinUpdate = GUICtrlCreateButton("Repair Windows Update",220,58,130) ; button to run a variety of commands to repair windows update
-   $RepPermissions = GUICtrlCreateButton("Repair Permissions",220,90,130) ; button to repair permissions on windows computers
-   $FileAssociations = GUICtrlCreateButton("Fix File Associations",220,122,130) ; Runs various commands to repair file associations in the registry
-   $SMARTData = GUICtrlCreateButton("Hard Drive Test",353,58,130) ; button to display SMART data for HDD troubleshooting
-GUICtrlCreateTabItem("Known Fixes") ; Nothing currently under this tab [to be implemented later]
+   local $ResNetwork = GUICtrlCreateButton("Reset Network",87,58,130) ; button that will perform a variety of network connection repair commands
+   local $RepFirewall = GUICtrlCreateButton("Repair Firewall",87,90,130) ; button to repair the windows firewall
+   local $ResFirewall = GUICtrlCreateButton("Reset Firewall",87,122,130) ; button to reset the windows firewall settings
+   local $RepWinUpdate = GUICtrlCreateButton("Repair Windows Update",220,58,130) ; button to run a variety of commands to repair windows update
+   local $RepPermissions = GUICtrlCreateButton("Repair Permissions",220,90,130) ; button to repair permissions on windows computers
+   local $FileAssociations = GUICtrlCreateButton("Fix File Associations",220,122,130) ; Runs various commands to repair file associations in the registry
+   local $SMARTData = GUICtrlCreateButton("Hard Drive Test",353,58,130) ; button to display SMART data for HDD troubleshooting
+$Tab3 = GUICtrlCreateTabItem("Known Fixes") ; Nothing currently under this tab [to be implemented later]
 GUICtrlCreateTabItem("") ; A blank tab item indicates the end of the tab group
 
 ; Creates button row at bottom of window
-$btnExit = GUICtrlCreateButton("Exit", 5, 200, 60, 30) ; need to remove this button and shift the other three to the left appropriately
-$btnMAC = GUICtrlCreateButton("Manual MAC Address",70,200,120,30)
-$btnWorkgroup = GUICtrlCreateButton("Change Workgroup",195,200,110,30)
-$btnAddRemovePrograms = GUICtrlCreateButton("Programs and Features",310,200,130,30)
+local $btnExit = GUICtrlCreateButton("Exit", 5, 200, 60, 30) ; need to remove this button and shift the other three to the left appropriately
+local $btnMAC = GUICtrlCreateButton("Manual MAC Address",70,200,120,30)
+local $btnWorkgroup = GUICtrlCreateButton("Change Workgroup",195,200,110,30)
+local $btnAddRemovePrograms = GUICtrlCreateButton("Programs and Features",310,200,130,30)
 ; There is plenty of room to add other functionality here, would be a good thing to find out what can be added for automation
 
 ; Show GUI

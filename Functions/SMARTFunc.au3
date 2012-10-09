@@ -161,11 +161,10 @@ Func _GetSmartData($vDrive  = "C:") ;optional Parameter $vDrive is = C: by defau
 				$aSmartData[$NextRow][5] = $strVendorSpecific[$x +3];Value
 				$aSmartData[$NextRow][6] = $strVendorSpecific[$x +4];Worst
 				$aSmartData[$NextRow][7] = $Status[$iCnt];Status
-			EndIf
-			$iCnt+=1
+		EndIf
+		$iCnt+=1
 	Next
-
-			Return 	$aSmartData
+	Return 	$aSmartData
 EndFunc
 
 Func _PartitionToPhysicalDriveID($vPart)
@@ -178,14 +177,14 @@ Func _PartitionToPhysicalDriveID($vPart)
 	$colItems = $objWMIService.ExecQuery("SELECT * FROM Win32_DiskDriveToDiskPartition", "WQL", _
                                           $wbemFlagReturnImmediately + $wbemFlagForwardOnly)
 	If IsObj($colItems) then
-	   For $objItem In $colItems
-		   If $objItem.Dependent == $vPart then
-			   $vPdisk = $objItem.Antecedent ; saves data from query to string
-			   $vPdisk = StringReplace(StringTrimLeft($vPdisk,Stringinstr($vPdisk,"=")),'"',"") ; formats string
-			   $strDeviceID = StringReplace($vPdisk, "\\", "\") ; more formatting
+		For $objItem In $colItems
+			If $objItem.Dependent == $vPart then
+				$vPdisk = $objItem.Antecedent ; saves data from query to string
+				$vPdisk = StringReplace(StringTrimLeft($vPdisk,Stringinstr($vPdisk,"=")),'"',"") ; formats string
+				$strDeviceID = StringReplace($vPdisk, "\\", "\") ; more formatting
 				Return $strDeviceID ; sends physical drive ID 
 			Endif
-	   Next
+		Next
 	Endif
 	Return -1 ; Returns error if it was unable to collect information
 EndFunc
@@ -200,11 +199,11 @@ Func _PNPIDFromPhysicalDriveID($vDriveID)
 	$colItems = $objWMIService.ExecQuery("SELECT * FROM Win32_DiskDrive", "WQL", _
                                           $wbemFlagReturnImmediately + $wbemFlagForwardOnly)
 	If IsObj($colItems) then
-	   For $objItem In $colItems
-		If $objItem.DeviceID == $vDriveID then
-		  Return $objItem.PNPDeviceID ; Plug N Play ID
-		EndIf
-	  Next
+		For $objItem In $colItems
+			If $objItem.DeviceID == $vDriveID then
+				Return $objItem.PNPDeviceID ; Plug N Play ID
+			EndIf
+		Next
 	Endif
 	Return -1 ; Returns error if it was unable to collect information
 EndFunc
@@ -220,12 +219,12 @@ Func _LogicalToPartition ($vDriveLet)
 	$colItems = $objWMIService.ExecQuery("SELECT Dependent,Antecedent FROM Win32_LogicalDiskToPartition", "WQL", _
 											  $wbemFlagReturnImmediately + $wbemFlagForwardOnly)
 	If IsObj($colItems) then
-	   For $objItem In $colItems
-		   If StringRight($objItem.Dependent,4) == $vDriveLet then
-			$vAntecedent=$objItem.Antecedent
-		  Return $vAntecedent ; Partition 
-		EndIf
-	   Next
+		For $objItem In $colItems
+			If StringRight($objItem.Dependent,4) == $vDriveLet then
+				$vAntecedent=$objItem.Antecedent
+				Return $vAntecedent ; Partition 
+			EndIf
+		Next
 	Endif
 	Return -1 ; Returns error if it was unable to collect information
 EndFunc

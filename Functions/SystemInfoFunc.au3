@@ -57,16 +57,16 @@ Func GET_Total_RAM($objWMI) ; Takes WMI object as input, returns Local System's 
 EndFunc
 
 Func GET_System_Architecture($objWMI) ; Takes WMI object as input, returns Local System's Architecture (32 or 64 bit)
-   local $objItems = $objWMI.ExecQuery("SELECT * FROM Win32_Processor", "WQL", 0x10 + 0x20)
-   If IsObj($objItems) Then
-      For $objItem In $objItems
-		 If $objItem.AddressWidth == 64 Then ;Checks to see if 64 bit or not
-			Return "64-bit"
-		 Else
-			Return "32-bit"
-		 EndIf
-      Next
-   EndIf
+	local $objItems = $objWMI.ExecQuery("SELECT * FROM Win32_Processor", "WQL", 0x10 + 0x20)
+	If IsObj($objItems) Then
+		For $objItem In $objItems
+			If $objItem.AddressWidth == 64 Then ;Checks to see if 64 bit or not
+				Return "64-bit"
+			Else
+				Return "32-bit"
+			EndIf
+		Next
+	EndIf
 EndFunc
 
 Func GET_OS_and_Service_Pack($objWMI) ; Takes WMI object as input, returns Local System's OS version and Service pack, if any

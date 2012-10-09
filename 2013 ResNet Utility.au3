@@ -14,19 +14,26 @@
 ;           4. Although not perfectly implemented yet, the goal is to completely separate GUI from implementation, and localize variables as much
 ;              as possible
 #include <GuiConstantsEx.au3> ; This file is provided after installing Autoit, and provides the ability to use GUI environment.
-#include <array.au3> ; This is provided with Autoit and allows the use of arrays.
 #include <Functions\CMDFunc.au3> ;One of my files for common used funtions using command line
 #include <Functions\SMARTFunc.au3> ; A function for getting smart data, not my own code
 #include <Functions\SystemInfoFunc.au3> ;My function for getting system info
 #RequireAdmin ;runs this program as admin, and anything it calls, has admin as well, needed for command prompt scripts
+
 local $CurrentVersion = "0.3.0" ; Current version of the software
 local $Tab1,$Tab2,$Tab3 ; Declare Tab item variables
 local $OSEd,$SyTy,$SePa,$WaBr,$WaMa,$WiBr,$WiMa,$Bran,$Seri,$HsHf,$Memo,$Mode ; Declare variables to store system information
 local $Workgroup ; Declare variable to store workgroup in
+local $lblArray[12] ;Used to set color for data labels in a loop.
 
 ; Creates GUI, sets name in title bar and icon.
 GUICreate("ResNet Utility " & $CurrentVersion, 710, 235) ;Created the GUI form and the size
 GUISetIcon("resnet.ico", 0) ;Sets the icon for the window title bar (Should be in the same directory as this file, with this name!)
+local $objWMI = ObjGet("winmgmts:\\localhost\root\CIMV2") ;Create connection to WMI
+
+;The following rows parse data into arrays for easier use.
+local $OSInformation = stringsplit(GET_OS_and_Service_Pack($objWMI),"|") ;Values are as follows (Operating System, Service Pack)
+local $BrandModel = stringsplit(GET_Manufacturer_and_Model($objWMI),"|") ;Values are as follows (Computer Manufacturer, Model Number)
+local $NetworkSettings = stringSplit(GET_Ethernet_and_Wireless($objWMI),"|") ;The values as follows (Wifi Description, Wifi MAC Address, Wired Description, Wired MAC Address)
 
 ; Creates Tabs
 GUICtrlCreateTab(5, 5, 700, 190) ; Creates tab group
@@ -41,9 +48,9 @@ $Tab1 = GUICtrlCreateTabItem("Info") ;Creating the info tab
    GUICtrlCreateLabel("Service Pack:",12,100) ;100 are the height^
 
    ;Creates labels to contain data
-   $OSEd = GUICtrlCreateLabel("xxxx",83,52)
-   $SyTy = GUICtrlCreateLabel("xxxx",83,76)
-   $SePa = GUICtrlCreateLabel("xxxx",83,100)
+   $lblArray[0] = GUICtrlCreateLabel($OSInformation[1],83,52) ;OS Edition (Windows 8, Windows 7, Windows Vista
+   $lblArray[1] = GUICtrlCreateLabel(GET_System_Architecture($objWMI),83,76) ;32 or 64-bit
+   $lblArray[2] = GUICtrlCreateLabel($OSInformation[2],83,100) ;Service pack version installed
 
    ;Labels for network configuration
    GUICtrlCreateLabel("Network Hardware",165,30) ;Heading
@@ -54,11 +61,11 @@ $Tab1 = GUICtrlCreateTabItem("Info") ;Creating the info tab
    ;GUICtrlCreateLabel("DM Problems",130,178) ;Add Later, not currently implemented
 
    ;Creates labels to contain data
-   $WrBr = GUICtrlCreateLabel("xxxx",200,52,100,12)
-   $WrMa = GUICtrlCreateLabel("xxxx",200,76,100)
-   $WiBr = GUICtrlCreateLabel("xxxx",200,100,100,12)
-   $WiMa = GUICtrlCreateLabel("xxxx",200,124,100)
-   ;$DMPr = GUICtrlCreateLabel("xxxx",180,178) ;Add Later, not currently implemented
+   $lblArray[3] = GUICtrlCreateLabel($NetworkSettings[3],200,52,100,12) ;Wired Brand and description
+   $lblArray[4] = GUICtrlCreateLabel($NetworkSettings[4],200,76,100) ;Wired MAC Address
+   $lblArray[5] = GUICtrlCreateLabel($NetworkSettings[1],200,100,100,12) ;Wireless Brand and description
+   $lblArray[6] = GUICtrlCreateLabel($NetworkSettings[2],200,124,100) ;Wireless MAC Address
+   ;GUICtrlCreateLabel("xxxx",180,178) ;Add Later, not currently implemented
 
    ;Labels for Vendor informatrion and System Specs
    GUICtrlCreateLabel("Vendor Information",300,30) ;Heading
@@ -68,40 +75,33 @@ $Tab1 = GUICtrlCreateTabItem("Info") ;Creating the info tab
    GUICtrlCreateLabel("RAM:",300,124)
 
    ;Creates labels to contain data
-   $Bran = GUICtrlCreateLabel("xxxx",340,52,100)
-   $Seri = GUICtrlCreateLabel("xxxx",340,76,100)
-   $HsHf = GUICtrlCreateLabel("xxxx",340,100,100,12)
-   $Memo = GUICtrlCreateLabel("xxxx",340,124,100)
+   $lblArray[7] = GUICtrlCreateLabel($BrandModel[1],340,52,100) ;Computer Manufacturer
+   $lblArray[8] = GUICtrlCreateLabel(GET_Serial_Number($objWMI),340,76,100) ;Serial Number
+   $lblArray[9] = GUICtrlCreateLabel(GET_HDD_Total_and_Free($objWMI),340,100,100,12) ;Hard drive total and free space
+   $lblArray[10] = GUICtrlCreateLabel(GET_Total_RAM($objWMI),340,124,100) ;Total RAM on system
 
    ;Label for Model
    GUICtrlCreateLabel("Model:",450,52)
 
    ;Data
-   $Mode = GUICtrlCreateLabel("xxxx",490,52,100,12)
+   $lblArray[11] = GUICtrlCreateLabel($BrandModel[2],490,52,100,12) ;Model Number
 
 
    ;Group for alerts
    GUICtrlCreateGroup("Alerts",418,107,280,70)
       GUICtrlSetBkColor(-1, 0xFF0000)
-	  $Workgroup = GUICtrlCreateLabel("",424,130,100,12) ;Shows up only if workgroup is not ResNet
+	  GUICtrlCreateLabel("",424,130,100,12) ;Shows up only if workgroup is not ResNet
 	  GUICtrlSetColor(-1,0xFF0000)
 	  ;$IPAd = GUICtrlCreateLabel("",424,124,100,12) ;Will warn if IP address does not match filter [To be implemented later]
 	  ;GUICtrlSetColor(-1,0xFF0000) ; Uncomment this when IPaddress filtering works
    GUICtrlCreateGroup("",-99,-99,1,1)
-
-   ;Sets color of text for data portions
-   GUICtrlSetColor($OSEd,0x0000FF)
-   GUICtrlSetColor($SyTy,0x0000FF)
-   GUICtrlSetColor($SePa,0x0000FF)
-   GUICtrlSetColor($WrBr,0x0000FF)
-   GUICtrlSetColor($WrMa,0x0000FF)
-   GUICtrlSetColor($WiBr,0x0000FF)
-   GUICtrlSetColor($WiMa,0x0000FF)
-   GUICtrlSetColor($Bran,0x0000FF)
-   GUICtrlSetColor($Seri,0x0000FF)
-   GUICtrlSetColor($HsHf,0x0000FF)
-   GUICtrlSetColor($Memo,0x0000FF)
-   GUICtrlSetColor($Mode,0x0000FF)
+   
+   local $i ;declares variable for loop
+   If IsArray($lblArray) Then
+	For $i = 0 to 11
+		GUICtrlSetColor($lblArray[$i],0x0000FF)
+	Next
+   EndIf
 
 $Tab2 = GUICtrlCreateTabItem("Repair")
    ;Create Buttons to call repair functions (in the repair tab) The On-Click part is handled by the Case statement lower down
@@ -122,16 +122,9 @@ local $btnWorkgroup = GUICtrlCreateButton("Change Workgroup",195,200,110,30)
 local $btnAddRemovePrograms = GUICtrlCreateButton("Programs and Features",310,200,130,30)
 ; There is plenty of room to add other functionality here, would be a good thing to find out what can be added for automation
 
-; Show GUI
-GUISetState(@SW_SHOW) ; Command to actually display the GUI
-systemInfo() ;Populates fields on GUI with data obtained from the SystemInfoFunc.au3 file. The function directly makes changes to the values
-             ;of the lables on the form, and this needs to be changed [eventually] so that it does not directly change the values from the function
-			 ;but instead returns values that are used to update the GUI. That way the function does not need to know the names of variables in this 
-			 ;program. Additionally, it probably needs to be several functions instead of just one, for the sake of modularity.
+GUISetState(@SW_SHOW) ;Command to actually display the GUI
 
-; Up until this point we have seen the interface creation.  None of this previous code has any functions (except systemInfo())
-; nor do they call the methods without this next part. 
-
+; Up until this point we have seen the interface creation.  None of this previous code has any functions nor do they call the methods without this next part. 
 While 1
 	Switch GUIGetMsg()
 		Case $GUI_EVENT_CLOSE ;Closes window if program is given close signal (x at top of screen), built it 

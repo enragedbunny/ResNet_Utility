@@ -6,19 +6,15 @@
 ; Purpose: Provide WMI access to collect system information
 ; Compatability: Windows Vista/7 (probably XP, will work for Windows 8)
 
-Func systemInfo()
-   $objWMI = ObjGet("winmgmts:\\localhost\root\CIMV2") ;Create connection to WMI
-
-   ;Check device manager for errorss (Not implemented, but do not delete this)
-   ;$objItems = $objWMI.ExecQuery("SELECT * FROM Win32_PnPEntity WHERE ConfigManagerErrorCode <> 0", "WQL", 0x10 + 0x20)
-   ;If IsObj($objItems) Then
-   ;   For $objItem In $objItems
-   ;	  ;report that errors exist
-   ;   Next
-   ;EndIf
-
-; The following code is a prototype for breaking the above code into separate functions that do not rely on the GUI variables to work correctly
-; If you don't know what you are doing, don't edit any code below this point. Thanks (JK)
+Func GET_Device_Manager_Errors($objWMI)
+   	;Check device manager for errorss (Not implemented, but do not delete this)
+	$objItems = $objWMI.ExecQuery("SELECT * FROM Win32_PnPEntity WHERE ConfigManagerErrorCode <> 0", "WQL", 0x10 + 0x20)
+	If IsObj($objItems) Then
+		For $objItem In $objItems
+			;report that errors exist
+		Next
+	EndIf
+EndFunc
 Func GET_Manufacturer_and_Model($objWMI) ; Takes WMI object as input, returns Local System's Manufacturer and Model
 	$objItems = $objWMI.ExecQuery("SELECT * FROM Win32_ComputerSystem", "WQL", 0x10 + 0x20) ;Get Manufacturer and Model
 	If IsObj($objItems) Then
@@ -28,7 +24,7 @@ Func GET_Manufacturer_and_Model($objWMI) ; Takes WMI object as input, returns Lo
 	EndIf
 EndFunc
 
-Func GET_Serial_Numer($objWMI) ; Takes WMI object as input, returns Local System's Serial Number
+Func GET_Serial_Number($objWMI) ; Takes WMI object as input, returns Local System's Serial Number
 	local $objItems = $objWMI.ExecQuery("SELECT * FROM Win32_BIOS", "WQL", 0x10 + 0x20)
 	If IsObj($objItems) Then
 		For $objItem In $objItems
@@ -40,12 +36,12 @@ EndFunc
 Func GET_HDD_Total_and_Free($objWMI) ; Takes WMI object as input, returns Local System's Hard Drive Total space and Free space
 	local $objItems = $objWMI.ExecQuery("SELECT * FROM Win32_LogicalDisk", "WQL", 0x10 + 0x20)
 	If IsObj($objItems) Then
-		local $i = 0,$ii = 0 ;Declare and initialize variables used for counters
+		local $Counter = 0,$Counter2 = 0 ;Declare and initialize variables used for counters
 		For $objItem In $objItems ; This loop adds up each partition/hard drive to combine all sizes and free space together
-			$i = $i + Int($objItem.Size) ;Add up total disk space
-			$ii = $ii + Int($objItem.FreeSpace) ;Add up free space
+			$Counter = $Counter + Int($objItem.Size) ;Add up total disk space
+			$Counter2 = $Counter2 + Int($objItem.FreeSpace) ;Add up free space
 		Next
-		return String(Int($ii / (1024^3))) & " / " & String(Int($i / (1024^3))) & " GB") ;Converts HDD size and free space from B to GB and formats in a logical way
+		return String(Int($Counter2 / (1024^3))) & " / " & String(Int($Counter / (1024^3))) & " GB" ;Converts HDD size and free space from B to GB and formats in a logical way
 	EndIf
 EndFunc
 
@@ -56,7 +52,7 @@ Func GET_Total_RAM($objWMI) ; Takes WMI object as input, returns Local System's 
 		For $objItem In $objItems ; This loop combines each RAM slot
 			$Counter = $Counter + Int($objItem.Capacity)
 		Next
-		return String(Int($Counter1 / (1024^3))) & " GB") ;Converts B to GB, formats and returns the result
+		return String(Int($Counter / (1024^3))) & " GB" ;Converts B to GB, formats and returns the result
 	EndIf
 EndFunc
 
@@ -89,7 +85,7 @@ Func GET_OS_and_Service_Pack($objWMI) ; Takes WMI object as input, returns Local
 EndFunc
 
 Func GET_Ethernet_and_Wireless($objWMI) ; Takes WMI object as input, returns Local System's Wired and Wireless device description and MAC Address
-	local $WifiSettings,$WiredSettings
+	local $WifiSettings,$WiredSettings,$CombinedResults
 	local $objItems = $objWMI.ExecQuery("SELECT * FROM Win32_NetworkAdapter", "WQL", 0x10 + 0x20) ; Wifi/Wireless MAC Addresses and IPs
 	If IsObj($objItems) Then
 		For $objItem In $objItems
@@ -102,9 +98,8 @@ Func GET_Ethernet_and_Wireless($objWMI) ; Takes WMI object as input, returns Loc
 				EndIf
 			EndIf
 		Next
-		
+		Return $WifiSettings & "|" & $WiredSettings
 	EndIf
-EndFunc
 EndFunc
 
 Func GET_Workgroup($objWMI) ; Takes WMI object as input, returns Local System's Workgroup

@@ -1,47 +1,44 @@
 ;This file contains many functions for doing various things from command line
-;I don't think they depend on any other files
-;The FixFileAssociations function is probably the best example of how we should do these (if you want to add other functions to this file).
 
-
-Func AltGetMAC()
+Func AltGetMAC() ; Opens cmd.exe and executes ipconfig /all to manually check IP and MAC Addresses
 	RunWait('"' & @ComSpec & '" /k ' & 'ipconfig /all', @SystemDir,@SW_SHOW) ; RunWait starts the indicated program and waits until it loads before executing other code.
-EndFunc
+EndFunc ;Ends Function
 
-Func ResetNetwork() 
-	local $i
+Func ResetNetwork() ; Runs a variety of commands to repair/reset network settings to default values
+	local $i ;Declares $i variable for loop
 	local $Data = 'netsh winsock reset|' & _
 				 'netsh winsock reset catalog|' & _
 				 'netsh interface ip reset c:\int-resetlog.txt|' & _
 				 'netsh interface ip delete arpcache|' & _
 				 'ipconfig /flushdns|' & _
 				 'ipconfig /registerdns'
-	local $CMD = StringSplit($Data,"|")
+	local $CMD = StringSplit($Data,"|") ;Splits $Data into an array called $CMD, using | symbol as delimeter
 	
 	If IsArray($CMD) Then ;checks if $CMD is an array then runs the loop.
 		For $i = 1 to $CMD[0] ;looping from 1 to the end of the array because CMD[0] is the length from string split
 				RunWait('"' & @ComSpec & '" /c ' & $CMD[$i], @SystemDir,@SW_HIDE) ;@ComSpec is cmd prompt, and /c is for closing it. @SW_HIDE is a autoit command that hides the window, starts it hidden. @SystemDir is the working directory (not the path to the file).
-		Next
-	EndIf  
-EndFunc
+		Next ;Next continues the loop
+	EndIf ;EndIf ends this If statement
+EndFunc ;Ends Function
 
-Func AddRemovePrograms()
+Func AddRemovePrograms() ; Opens the Programs and Features window
 	RunWait('"' & @ComSpec & '" /c ' & 'appwiz.cpl', @SystemDir,@SW_HIDE) ;types appwiz.cpl in cmd prompt: runs add remove programs
-EndFunc
+EndFunc ;Ends Function
 
-Func RepairFirewall()
-   local $CMD1 = 'rundll32.exe setupapi.dll,InstallHinfSection Ndi-Steelhead 132 %windir%\inf\netrass.inf' ;changing the initialization
+Func RepairFirewall() ; Runs a command to repair the windows firewall settings
+   local $CMD1 = 'rundll32.exe setupapi.dll,InstallHinfSection Ndi-Steelhead 132 %windir%\inf\netrass.inf' ;Repairs windows firewall
+   RunWait('"' & @ComSpec & '" /c ' & $CMD1, @SystemDir,@SW_HIDE) ;Runs the previous command from command prompt
+EndFunc ;Ends Function
+
+Func ResetFirewall() ; Flushes out windows firewall settings (sets to default settings)
+   local $CMD1 = 'netsh firewall reset' ;Runs this command in command prompt
 
    RunWait('"' & @ComSpec & '" /c ' & $CMD1, @SystemDir,@SW_HIDE)
-EndFunc
+EndFunc ;Ends Function
 
-Func ResetFirewall()
-   local $CMD1 = 'netsh firewall reset'
-
-   RunWait('"' & @ComSpec & '" /c ' & $CMD1, @SystemDir,@SW_HIDE)
-EndFunc
-
-Func RepairWinUpdate()
-   Local $i
+Func RepairWinUpdate() ; Runs three sets of commands to repair windows update
+   Local $i ;Declares $i variable for loop
+   ;The first data set stops some WU services, deletes some files, renames some files/folders and changes the directory path to System32 folder
    Local $Data1 = 'net stop bits|' & _ ;& _ continues the next line... eg: net stop bits|net stop wuauserv|...
 			     'net stop wuauserv|' & _
 			     'Del "%ALLUSERSPROFILE%\Application Data\Microsoft\Network\Downloader\qmgr*.dat"|' & _
@@ -51,6 +48,7 @@ Func RepairWinUpdate()
 				 'sc.exe sdset bits D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)|' & _
 				 'sc.exe sdset wuauserv D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)|' & _
 				 'cd /d %WINDIR%\system32'
+   ;The second data set reregisters some dll files (if present) in the system32 folder (These DLLs are required for windows update to function)
    Local $Data2 = 'atl.dll|' & _
 				 'urlmon.dll|' & _
 				 'mshtml.dll|' & _
@@ -87,33 +85,37 @@ Func RepairWinUpdate()
 				 'wucltux.dll|' & _
 				 'muweb.dll|' & _
 				 'wuwebv.dll'
+   ;The third (and final) data set does some cleanup by resetting winsock settings and starting the windows update services back up.
    Local $Data3 = 'netsh reset winsock|' & _
 				  'net start bits|' & _
 				  'net start wuauserv'
-   Local $CMD = StringSplit($Data1, "|") ;Converts Data1 into an array $CMD
-   Local $CMDReg = StringSplit($Data2, "|")
-   Local $CMD2 = StringSplit($Data3, "|")
+   Local $CMD = StringSplit($Data1, "|") ;Converts $Data1 into array $CMD
+   Local $CMDReg = StringSplit($Data2, "|") ; Converts $Data2 into array $CMDReg
+   Local $CMD2 = StringSplit($Data3, "|") ; Converts $Data3 into array $CMD2
+   
    If IsArray($CMD) Then ;checks if $CMD is an array then runs the loop.
 	  For $i = 1 to $CMD[0] ;looping from 1 to the end of the array because CMD[0] is the length from string split
 		 RunWait('"' & @ComSpec & '" /c ' & $CMD[$i], @SystemDir, @SW_HIDE) ;This loopp is running all of the functions in Data1.
 	  Next ;Next continues the loop
    EndIf ;EndIf ends this if statement
-;so once this loop is closed it will run this next data set vvvvv
-   If IsArray($CMDReg) Then
-	  For $i = 1 to $CMDReg[0]
-		 RunWait('"' & @ComSpec & '" /c ' & 'regsvr32.exe /s ' & $CMDReg[$i], @SystemDir, @SW_HIDE)
-	  Next
-   EndIf
+   ;so once this loop is closed it will run this next data set vvvvv
 
-   If IsArray($CMD2) Then
-	  For $i = 1 to $CMD2[0]
+   If IsArray($CMDReg) Then ;Checks if $CMDReg was properly created as array
+	  For $i = 1 to $CMDReg[0] ;Loops from 1 to end of array ($CMDReg[0] contains the length of the array)
+		 RunWait('"' & @ComSpec & '" /c ' & 'regsvr32.exe /s ' & $CMDReg[$i], @SystemDir, @SW_HIDE)
+	  Next ;Next continues the loop
+   EndIf ;EndIf ends this if statement
+
+   If IsArray($CMD2) Then ;Checks if $CMD2 was properly created as array
+	  For $i = 1 to $CMD2[0] ;Loops from 1 to end of array ($CMDReg[0] contains the length of the array)
 		 RunWait('"' & @ComSpec & '" /c ' & $CMD2[$i], @SystemDir, @SW_HIDE)
-	  Next
-   EndIf
+	  Next ;Next continues the loop
+   EndIf ;EndIf ends this if statement
 EndFunc ;Ends Function
 
-Func FixFileAssociations() ;needs to be expanded a ton
-   Local $i
+Func FixFileAssociations() ;Fixes file extention problems (needs to be expanded and improved a ton)
+   Local $i ;Declares $i variable for loop
+   ;The following dataset is used to set file extentions back to default (alters the registry)
    Local $Data = '.exe=exefile|' & _
 			     '.bat=batfile|' & _
 				 '.reg=regfile|' & _
@@ -121,15 +123,15 @@ Func FixFileAssociations() ;needs to be expanded a ton
 				 '.xml=xmlfile|' & _
 				 '.lnk=lnkfile|' & _
 				 '.ico=icofile|'
-   Local $CMD = StringSplit($Data, "|") ;String split saves length as CMD[0] in the array.
-   If IsArray($CMD) Then
-	  For $i = 1 to $CMD[0]
+   Local $CMD = StringSplit($Data, "|") ;String split saves length of array as CMD[0] in the array.
+   If IsArray($CMD) Then ;Checks if $CMD was properly created as array
+	  For $i = 1 to $CMD[0] ;Loops from 1 to end of array ($CMD[0] contains the length of the array.
 		 RunWait('"' & @ComSpec & '" /c ' & 'assoc ' & $CMD[$i], @SystemDir, @SW_HIDE)
-	  Next
-   EndIf
-EndFunc
+	  Next ;Next continues the loop
+   EndIf ;EndIf ends this if statement
+EndFunc ;Ends Function
 
-Func OpenWorkgroup()
-	RunWait('"' & @ComSpec & '" /c ' & 'control.exe %windir%\system32\sysdm.cpl', @SystemDir,@SW_HIDE) ;pulls up control panel>
-	ControlClick("System Properties","&Change...",115,"primary",1) ;System>changeSettings
-EndFunc
+Func OpenWorkgroup() ;Opens advanced computer options and opens the dialog to change workgroup and computer name settings
+	RunWait('"' & @ComSpec & '" /c ' & 'control.exe %windir%\system32\sysdm.cpl', @SystemDir,@SW_HIDE) ;pulls up Advanced system properties
+	ControlClick("System Properties","&Change...",115,"primary",1) ;Opens change workgroup dialog
+EndFunc ;Ends Function

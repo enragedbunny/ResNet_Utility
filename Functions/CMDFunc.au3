@@ -48,6 +48,7 @@ Func RepairWinUpdate() ; Runs three sets of commands to repair windows update
 				 'sc.exe sdset bits D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)|' & _  ;Configure BITS settings (a windows service)
 				 'sc.exe sdset wuauserv D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)|' & _ ;Configure WUAUServ settings (a windows service)
 				 'cd /d %WINDIR%\system32' ;Changes working directory in cmd prompt to run the following DLL Register commands
+
 	;The second data set reregisters some dll files (if present) in the system32 folder (These DLLs are required for windows update to function)
 	Local $Data2 = 'atl.dll|' & _
 				 'urlmon.dll|' & _

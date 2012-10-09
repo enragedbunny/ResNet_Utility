@@ -38,80 +38,79 @@ local $NetworkSettings = stringSplit(GET_Ethernet_and_Wireless($objWMI),"|") ;Th
 ; Creates Tabs
 GUICtrlCreateTab(5, 5, 700, 190) ; Creates tab group
 $Tab1 = GUICtrlCreateTabItem("Info") ;Creating the info tab
-   ;Creates labels, text boxes and checkboxes to collect system
-   ;information and present it.
+	;Creates labels, to collect system information and present it.
 
-   ;Display first two columns (OS, System Type, Service Pack)
-   GUICtrlCreateLabel("Operating System",22,30) ;Heading
-   GUICtrlCreateLabel("OS Edition:",12,52) ;12 is pxels from left, 52, & 
-   GUICtrlCreateLabel("System Type:",12,76) ;76,& ^
-   GUICtrlCreateLabel("Service Pack:",12,100) ;100 are the height^
+	;Display first two columns (OS, System Type, Service Pack)
+	GUICtrlCreateLabel("Operating System",22,30) ;Heading
+	GUICtrlCreateLabel("OS Edition:",12,52) ;12 is pxels from left, 52, & 
+	GUICtrlCreateLabel("System Type:",12,76) ;76,& ^
+	GUICtrlCreateLabel("Service Pack:",12,100) ;100 are the height^
 
-   ;Creates labels to contain data
-   $lblArray[0] = GUICtrlCreateLabel($OSInformation[1],83,52) ;OS Edition (Windows 8, Windows 7, Windows Vista
-   $lblArray[1] = GUICtrlCreateLabel(GET_System_Architecture($objWMI),83,76) ;32 or 64-bit
-   $lblArray[2] = GUICtrlCreateLabel($OSInformation[2],83,100) ;Service pack version installed
+	;Creates labels to contain data
+	$lblArray[0] = GUICtrlCreateLabel($OSInformation[1],83,52) ;OS Edition (Windows 8, Windows 7, Windows Vista
+	$lblArray[1] = GUICtrlCreateLabel(GET_System_Architecture($objWMI),83,76) ;32 or 64-bit
+	$lblArray[2] = GUICtrlCreateLabel($OSInformation[2],83,100) ;Service pack version installed
 
-   ;Labels for network configuration
-   GUICtrlCreateLabel("Network Hardware",165,30) ;Heading
-   GUICtrlCreateLabel("Wired Brand:",130,52)
-   GUICtrlCreateLabel("Wired MAC:",130,76)
-   GUICtrlCreateLabel("Wi-Fi Brand:",130,100)
-   GUICtrlCreateLabel("Wi-Fi MAC:",130,124)
-   ;GUICtrlCreateLabel("DM Problems",130,178) ;Add Later, not currently implemented
+	;Labels for network configuration
+	GUICtrlCreateLabel("Network Hardware",165,30) ;Heading
+	GUICtrlCreateLabel("Wired Brand:",130,52)
+	GUICtrlCreateLabel("Wired MAC:",130,76)
+	GUICtrlCreateLabel("Wi-Fi Brand:",130,100)
+	GUICtrlCreateLabel("Wi-Fi MAC:",130,124)
+	;GUICtrlCreateLabel("DM Problems",130,178) ;Add Later, not currently implemented
 
-   ;Creates labels to contain data
-   $lblArray[3] = GUICtrlCreateLabel($NetworkSettings[3],200,52,100,12) ;Wired Brand and description
-   $lblArray[4] = GUICtrlCreateLabel($NetworkSettings[4],200,76,100) ;Wired MAC Address
-   $lblArray[5] = GUICtrlCreateLabel($NetworkSettings[1],200,100,100,12) ;Wireless Brand and description
-   $lblArray[6] = GUICtrlCreateLabel($NetworkSettings[2],200,124,100) ;Wireless MAC Address
-   ;GUICtrlCreateLabel("xxxx",180,178) ;Add Later, not currently implemented
+	;Creates labels to contain data
+	$lblArray[3] = GUICtrlCreateLabel($NetworkSettings[3],200,52,100,12) ;Wired Brand and description
+	$lblArray[4] = GUICtrlCreateLabel($NetworkSettings[4],200,76,100) ;Wired MAC Address
+	$lblArray[5] = GUICtrlCreateLabel($NetworkSettings[1],200,100,100,12) ;Wireless Brand and description
+	$lblArray[6] = GUICtrlCreateLabel($NetworkSettings[2],200,124,100) ;Wireless MAC Address
+	;GUICtrlCreateLabel("xxxx",180,178) ;Add Later, not currently implemented
 
-   ;Labels for Vendor informatrion and System Specs
-   GUICtrlCreateLabel("Vendor Information",300,30) ;Heading
-   GUICtrlCreateLabel("Brand:",300,52)
-   GUICtrlCreateLabel("Serial#:",300,76)
-   GUICtrlCreateLabel("HDD:",300,100)
-   GUICtrlCreateLabel("RAM:",300,124)
+	;Labels for Vendor informatrion and System Specs
+	GUICtrlCreateLabel("Vendor Information",300,30) ;Heading
+	GUICtrlCreateLabel("Brand:",300,52)
+	GUICtrlCreateLabel("Serial#:",300,76)
+	GUICtrlCreateLabel("HDD:",300,100)
+	GUICtrlCreateLabel("RAM:",300,124)
 
-   ;Creates labels to contain data
-   $lblArray[7] = GUICtrlCreateLabel($BrandModel[1],340,52,100) ;Computer Manufacturer
-   $lblArray[8] = GUICtrlCreateLabel(GET_Serial_Number($objWMI),340,76,100) ;Serial Number
-   $lblArray[9] = GUICtrlCreateLabel(GET_HDD_Total_and_Free($objWMI),340,100,100,12) ;Hard drive total and free space
-   $lblArray[10] = GUICtrlCreateLabel(GET_Total_RAM($objWMI),340,124,100) ;Total RAM on system
+	;Creates labels to contain data
+	$lblArray[7] = GUICtrlCreateLabel($BrandModel[1],340,52,100) ;Computer Manufacturer
+	$lblArray[8] = GUICtrlCreateLabel(GET_Serial_Number($objWMI),340,76,100) ;Serial Number
+	$lblArray[9] = GUICtrlCreateLabel(GET_HDD_Total_and_Free($objWMI),340,100,100,12) ;Hard drive total and free space
+	$lblArray[10] = GUICtrlCreateLabel(GET_Total_RAM($objWMI),340,124,100) ;Total RAM on system
 
-   ;Label for Model
-   GUICtrlCreateLabel("Model:",450,52)
+	;Label for Model
+	GUICtrlCreateLabel("Model:",450,52)
 
-   ;Data
-   $lblArray[11] = GUICtrlCreateLabel($BrandModel[2],490,52,100,12) ;Model Number
+	;Data
+	$lblArray[11] = GUICtrlCreateLabel($BrandModel[2],490,52,100,12) ;Model Number
 
 
-   ;Group for alerts
-   GUICtrlCreateGroup("Alerts",418,107,280,70)
-      GUICtrlSetBkColor(-1, 0xFF0000)
-	  GUICtrlCreateLabel("",424,130,100,12) ;Shows up only if workgroup is not ResNet
-	  GUICtrlSetColor(-1,0xFF0000)
-	  ;$IPAd = GUICtrlCreateLabel("",424,124,100,12) ;Will warn if IP address does not match filter [To be implemented later]
-	  ;GUICtrlSetColor(-1,0xFF0000) ; Uncomment this when IPaddress filtering works
-   GUICtrlCreateGroup("",-99,-99,1,1)
+	;Group for alerts
+	GUICtrlCreateGroup("Alerts",418,107,280,70)
+		GUICtrlSetBkColor(-1, 0xFF0000)
+		GUICtrlCreateLabel("",424,130,100,12) ;Shows up only if workgroup is not ResNet
+		GUICtrlSetColor(-1,0xFF0000)
+		;$IPAd = GUICtrlCreateLabel("",424,124,100,12) ;Will warn if IP address does not match filter [To be implemented later]
+		;GUICtrlSetColor(-1,0xFF0000) ; Uncomment this when IPaddress filtering works
+	GUICtrlCreateGroup("",-99,-99,1,1)
    
-   local $i ;declares variable for loop
-   If IsArray($lblArray) Then
-	For $i = 0 to 11
-		GUICtrlSetColor($lblArray[$i],0x0000FF)
-	Next
-   EndIf
+	local $i ;declares variable for loop
+	If IsArray($lblArray) Then
+		For $i = 0 to 11
+			GUICtrlSetColor($lblArray[$i],0x0000FF)
+		Next
+	EndIf
 
 $Tab2 = GUICtrlCreateTabItem("Repair")
-   ;Create Buttons to call repair functions (in the repair tab) The On-Click part is handled by the Case statement lower down
-   local $ResNetwork = GUICtrlCreateButton("Reset Network",87,58,130) ; button that will perform a variety of network connection repair commands
-   local $RepFirewall = GUICtrlCreateButton("Repair Firewall",87,90,130) ; button to repair the windows firewall
-   local $ResFirewall = GUICtrlCreateButton("Reset Firewall",87,122,130) ; button to reset the windows firewall settings
-   local $RepWinUpdate = GUICtrlCreateButton("Repair Windows Update",220,58,130) ; button to run a variety of commands to repair windows update
-   local $RepPermissions = GUICtrlCreateButton("Repair Permissions",220,90,130) ; button to repair permissions on windows computers
-   local $FileAssociations = GUICtrlCreateButton("Fix File Associations",220,122,130) ; Runs various commands to repair file associations in the registry
-   local $SMARTData = GUICtrlCreateButton("Hard Drive Test",353,58,130) ; button to display SMART data for HDD troubleshooting
+	;Create Buttons to call repair functions (in the repair tab) The On-Click part is handled by the Case statement lower down
+	local $btnResNetwork = GUICtrlCreateButton("Reset Network",87,58,130) ; button that will perform a variety of network connection repair commands
+	local $btnRepFirewall = GUICtrlCreateButton("Repair Firewall",87,90,130) ; button to repair the windows firewall
+	local $btnResFirewall = GUICtrlCreateButton("Reset Firewall",87,122,130) ; button to reset the windows firewall settings
+	local $btnRepWinUpdate = GUICtrlCreateButton("Repair Windows Update",220,58,130) ; button to run a variety of commands to repair windows update
+	local $btnRepPermissions = GUICtrlCreateButton("Repair Permissions",220,90,130) ; button to repair permissions on windows computers
+	local $btnFileAssociations = GUICtrlCreateButton("Fix File Associations",220,122,130) ; Runs various commands to repair file associations in the registry
+	local $btnSMARTData = GUICtrlCreateButton("Hard Drive Test",353,58,130) ; button to display SMART data for HDD troubleshooting
 $Tab3 = GUICtrlCreateTabItem("Known Fixes") ; Nothing currently under this tab [to be implemented later]
 GUICtrlCreateTabItem("") ; A blank tab item indicates the end of the tab group
 
@@ -135,19 +134,19 @@ While 1
 			OpenWorkgroup() ;This method is located in the Function: CMDFunc on Line 131
 		Case $btnMAC ;if clicked run vvv
 			AltGetMAC() ; Alternate way to get MAC address, CMDFunc Line 6
-		Case $ResNetwork ;if clicked run vvv
+		Case $btnResNetwork ;if clicked run vvv
 			ResetNetwork() ;CMDFunc Line 10
-		Case $RepFirewall ;if clicked...
+		Case $btnRepFirewall ;if clicked...
 			RepairFirewall() ;CMDFunc Line 30
-		Case $ResFirewall ;if ...
+		Case $btnResFirewall ;if ...
 			ResetFirewall() ;CMDFunc Line 36
-		Case $RepWinUpdate ;same
+		Case $btnRepWinUpdate ;same
 			RepairWinUpdate() ;CMDFunc Line 42
-		Case $FileAssociations ;same
+		Case $btnFileAssociations ;same
 			FixFileAssociations() ;CMDFunc Line 114
 		Case $btnAddRemovePrograms ;same (i'm saying that in all of these seperate cases when the button is clicked it will run the proceeding function)
 			AddRemovePrograms() ;CMDFunc Line 26
-		Case $SMARTData 
+		Case $btnSMARTData 
 			Initialize_SMART()
 	EndSwitch
 WEnd ;Case SMARTData is the last case in this while loop, Also it is the only one that uses the other Class(Func) SMARTFunc, so if we can figure out

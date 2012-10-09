@@ -37,9 +37,9 @@ Func ResetFirewall() ; Flushes out windows firewall settings (sets to default se
 EndFunc ;Ends Function
 
 Func RepairWinUpdate() ; Runs three sets of commands to repair windows update
-   Local $i ;Declares $i variable for loop
-   ;The first data set stops some WU services, deletes some files, renames some files/folders and changes the directory path to System32 folder
-   Local $Data1 = 'net stop bits|' & _ ;& _ continues the next line... eg: net stop bits|net stop wuauserv|...
+	Local $i ;Declares $i variable for loop
+	;The first data set stops some WU services, deletes some files, renames some files/folders and changes the directory path to System32 folder
+	Local $Data1 = 'net stop bits|' & _ ;& _ continues the next line... eg: net stop bits|net stop wuauserv|...
 			     'net stop wuauserv|' & _
 			     'Del "%ALLUSERSPROFILE%\Application Data\Microsoft\Network\Downloader\qmgr*.dat"|' & _
 				 'Ren %systemroot%\SoftwareDistrobution\DataStore *.bak|' & _
@@ -48,8 +48,8 @@ Func RepairWinUpdate() ; Runs three sets of commands to repair windows update
 				 'sc.exe sdset bits D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)|' & _
 				 'sc.exe sdset wuauserv D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)|' & _
 				 'cd /d %WINDIR%\system32'
-   ;The second data set reregisters some dll files (if present) in the system32 folder (These DLLs are required for windows update to function)
-   Local $Data2 = 'atl.dll|' & _
+	;The second data set reregisters some dll files (if present) in the system32 folder (These DLLs are required for windows update to function)
+	Local $Data2 = 'atl.dll|' & _
 				 'urlmon.dll|' & _
 				 'mshtml.dll|' & _
 				 'shdocvw.dll|' & _
@@ -85,50 +85,50 @@ Func RepairWinUpdate() ; Runs three sets of commands to repair windows update
 				 'wucltux.dll|' & _
 				 'muweb.dll|' & _
 				 'wuwebv.dll'
-   ;The third (and final) data set does some cleanup by resetting winsock settings and starting the windows update services back up.
-   Local $Data3 = 'netsh reset winsock|' & _
+	;The third (and final) data set does some cleanup by resetting winsock settings and starting the windows update services back up.
+	Local $Data3 = 'netsh reset winsock|' & _
 				  'net start bits|' & _
 				  'net start wuauserv'
-   Local $CMD = StringSplit($Data1, "|") ;Converts $Data1 into array $CMD
-   Local $CMDReg = StringSplit($Data2, "|") ; Converts $Data2 into array $CMDReg
-   Local $CMD2 = StringSplit($Data3, "|") ; Converts $Data3 into array $CMD2
+	Local $CMD = StringSplit($Data1, "|") ;Converts $Data1 into array $CMD
+	Local $CMDReg = StringSplit($Data2, "|") ; Converts $Data2 into array $CMDReg
+	Local $CMD2 = StringSplit($Data3, "|") ; Converts $Data3 into array $CMD2
    
-   If IsArray($CMD) Then ;checks if $CMD is an array then runs the loop.
-	  For $i = 1 to $CMD[0] ;looping from 1 to the end of the array because CMD[0] is the length from string split
-		 RunWait('"' & @ComSpec & '" /c ' & $CMD[$i], @SystemDir, @SW_HIDE) ;This loopp is running all of the functions in Data1.
-	  Next ;Next continues the loop
-   EndIf ;EndIf ends this if statement
-   ;so once this loop is closed it will run this next data set vvvvv
+	If IsArray($CMD) Then ;checks if $CMD is an array then runs the loop.
+		For $i = 1 to $CMD[0] ;looping from 1 to the end of the array because CMD[0] is the length from string split
+			RunWait('"' & @ComSpec & '" /c ' & $CMD[$i], @SystemDir, @SW_HIDE) ;This loopp is running all of the functions in Data1.
+		Next ;Next continues the loop
+	EndIf ;EndIf ends this if statement
+	;so once this loop is closed it will run this next data set vvvvv
 
-   If IsArray($CMDReg) Then ;Checks if $CMDReg was properly created as array
-	  For $i = 1 to $CMDReg[0] ;Loops from 1 to end of array ($CMDReg[0] contains the length of the array)
-		 RunWait('"' & @ComSpec & '" /c ' & 'regsvr32.exe /s ' & $CMDReg[$i], @SystemDir, @SW_HIDE)
-	  Next ;Next continues the loop
-   EndIf ;EndIf ends this if statement
+	If IsArray($CMDReg) Then ;Checks if $CMDReg was properly created as array
+		For $i = 1 to $CMDReg[0] ;Loops from 1 to end of array ($CMDReg[0] contains the length of the array)
+			RunWait('"' & @ComSpec & '" /c ' & 'regsvr32.exe /s ' & $CMDReg[$i], @SystemDir, @SW_HIDE)
+		Next ;Next continues the loop
+	EndIf ;EndIf ends this if statement
 
-   If IsArray($CMD2) Then ;Checks if $CMD2 was properly created as array
-	  For $i = 1 to $CMD2[0] ;Loops from 1 to end of array ($CMDReg[0] contains the length of the array)
-		 RunWait('"' & @ComSpec & '" /c ' & $CMD2[$i], @SystemDir, @SW_HIDE)
-	  Next ;Next continues the loop
-   EndIf ;EndIf ends this if statement
+	If IsArray($CMD2) Then ;Checks if $CMD2 was properly created as array
+		For $i = 1 to $CMD2[0] ;Loops from 1 to end of array ($CMDReg[0] contains the length of the array)
+			RunWait('"' & @ComSpec & '" /c ' & $CMD2[$i], @SystemDir, @SW_HIDE)
+		Next ;Next continues the loop
+	EndIf ;EndIf ends this if statement
 EndFunc ;Ends Function
 
 Func FixFileAssociations() ;Fixes file extention problems (needs to be expanded and improved a ton)
-   Local $i ;Declares $i variable for loop
-   ;The following dataset is used to set file extentions back to default (alters the registry)
-   Local $Data = '.exe=exefile|' & _
+	Local $i ;Declares $i variable for loop
+	;The following dataset is used to set file extentions back to default (alters the registry)
+	Local $Data = '.exe=exefile|' & _
 			     '.bat=batfile|' & _
 				 '.reg=regfile|' & _
 				 '.com=comfile|' & _
 				 '.xml=xmlfile|' & _
 				 '.lnk=lnkfile|' & _
 				 '.ico=icofile|'
-   Local $CMD = StringSplit($Data, "|") ;String split saves length of array as CMD[0] in the array.
-   If IsArray($CMD) Then ;Checks if $CMD was properly created as array
-	  For $i = 1 to $CMD[0] ;Loops from 1 to end of array ($CMD[0] contains the length of the array.
-		 RunWait('"' & @ComSpec & '" /c ' & 'assoc ' & $CMD[$i], @SystemDir, @SW_HIDE)
-	  Next ;Next continues the loop
-   EndIf ;EndIf ends this if statement
+	Local $CMD = StringSplit($Data, "|") ;String split saves length of array as CMD[0] in the array.
+	If IsArray($CMD) Then ;Checks if $CMD was properly created as array
+		For $i = 1 to $CMD[0] ;Loops from 1 to end of array ($CMD[0] contains the length of the array.
+			RunWait('"' & @ComSpec & '" /c ' & 'assoc ' & $CMD[$i], @SystemDir, @SW_HIDE)
+		Next ;Next continues the loop
+	EndIf ;EndIf ends this if statement
 EndFunc ;Ends Function
 
 Func OpenWorkgroup() ;Opens advanced computer options and opens the dialog to change workgroup and computer name settings

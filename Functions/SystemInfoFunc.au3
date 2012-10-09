@@ -6,6 +6,7 @@
 ; Purpose: Provide WMI access to collect system information
 ; Compatability: Windows Vista/7 (probably XP, will work for Windows 8)
 
+<<<<<<< HEAD
 Func GET_Device_Manager_Errors($objWMI) ;retrieve device manager errors (Coded, NOT tested) will not return errors, but instead tell you if there are any
 	$objItems = $objWMI.ExecQuery("SELECT * FROM Win32_PnPEntity WHERE ConfigManagerErrorCode <> 0", "WQL", 0x10 + 0x20) ;query WMI to retrieve Win32_PnPEntity
 	If IsObj($objItems) Then
@@ -20,6 +21,17 @@ Func GET_Device_Manager_Errors($objWMI) ;retrieve device manager errors (Coded, 
 	Return $DMErrArray
 EndFunc
 
+=======
+Func GET_Device_Manager_Errors($objWMI)
+   	;Check device manager for errorss (Not implemented, but do not delete this)
+	$objItems = $objWMI.ExecQuery("SELECT * FROM Win32_PnPEntity WHERE ConfigManagerErrorCode <> 0", "WQL", 0x10 + 0x20)
+	If IsObj($objItems) Then
+		For $objItem In $objItems
+			;report that errors exist
+		Next
+	EndIf
+EndFunc
+>>>>>>> Updated SysInfoFunc and modified main utility to make changes work
 Func GET_Manufacturer_and_Model($objWMI) ; Takes WMI object as input, returns Local System's Manufacturer and Model
 	$objItems = $objWMI.ExecQuery("SELECT * FROM Win32_ComputerSystem", "WQL", 0x10 + 0x20) ;query WMI to retrieve Win32_ComputerSystem
 	If IsObj($objItems) Then
@@ -30,7 +42,11 @@ Func GET_Manufacturer_and_Model($objWMI) ; Takes WMI object as input, returns Lo
 EndFunc
 
 Func GET_Serial_Number($objWMI) ; Takes WMI object as input, returns Local System's Serial Number
+<<<<<<< HEAD
 	local $objItems = $objWMI.ExecQuery("SELECT * FROM Win32_BIOS", "WQL", 0x10 + 0x20) ;query WMI to retrieve Win32_BIOS
+=======
+	local $objItems = $objWMI.ExecQuery("SELECT * FROM Win32_BIOS", "WQL", 0x10 + 0x20)
+>>>>>>> Updated SysInfoFunc and modified main utility to make changes work
 	If IsObj($objItems) Then
 		For $objItem In $objItems
 			Return $objItem.SerialNumber ;return serial number of local machine
@@ -57,7 +73,11 @@ Func GET_Total_RAM($objWMI) ; Takes WMI object as input, returns Local System's 
 		For $objItem In $objItems ; This loop combines each RAM slot
 			$Counter = $Counter + Int($objItem.Capacity)
 		Next
+<<<<<<< HEAD
 		return String(Int($Counter / (1024^3))) & " GB" ;Converts B to GB, formats and returns total RAM
+=======
+		return String(Int($Counter / (1024^3))) & " GB" ;Converts B to GB, formats and returns the result
+>>>>>>> Updated SysInfoFunc and modified main utility to make changes work
 	EndIf
 EndFunc
 
@@ -91,7 +111,11 @@ EndFunc
 
 Func GET_Ethernet_and_Wireless($objWMI) ; Takes WMI object as input, returns Local System's Wired and Wireless device description and MAC Address
 	local $WifiSettings,$WiredSettings,$CombinedResults
+<<<<<<< HEAD
 	local $objItems = $objWMI.ExecQuery("SELECT * FROM Win32_NetworkAdapter", "WQL", 0x10 + 0x20) ;query WMI to retrieve Win32_NetworkAdapter
+=======
+	local $objItems = $objWMI.ExecQuery("SELECT * FROM Win32_NetworkAdapter", "WQL", 0x10 + 0x20) ; Wifi/Wireless MAC Addresses and IPs
+>>>>>>> Updated SysInfoFunc and modified main utility to make changes work
 	If IsObj($objItems) Then
 		For $objItem In $objItems
 			;The following line does some filtering. It makes sure the entry has a MAC address, and is not WiMAX, Miniport, or bluetooth.
@@ -103,6 +127,7 @@ Func GET_Ethernet_and_Wireless($objWMI) ; Takes WMI object as input, returns Loc
 				EndIf
 			EndIf
 		Next
+<<<<<<< HEAD
 		If $WifiSettings = "" Then ; If there is no wifi Adapter, loads default data
 			$WifiSettings = "No Adapter|##:##:##:##:##:##|" ;Indicates there is no adapter
 		EndIf
@@ -110,6 +135,9 @@ Func GET_Ethernet_and_Wireless($objWMI) ; Takes WMI object as input, returns Loc
 			$WiredSettings = "No Adapter|##:##:##:##:##:##" ;Indicates there is no adapter
 		EndIf
 		Return $WifiSettings & $WiredSettings ; returns wireless and wired description and MAC Address in the format "WirelessDescription|MACAddress|WiredDescription|MACAddress".
+=======
+		Return $WifiSettings & "|" & $WiredSettings
+>>>>>>> Updated SysInfoFunc and modified main utility to make changes work
 	EndIf
 EndFunc
 

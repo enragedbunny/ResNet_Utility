@@ -98,7 +98,7 @@ Func GET_Ethernet_and_Wireless($objWMI) ; Takes WMI object as input, returns Loc
 				EndIf
 			EndIf
 		Next
-		Return $WifiSettings & "|" & $WiredSettings
+		Return $WifiSettings & "|" & $WiredSettings ; returns wireless and wired description and MAC Address.
 	EndIf
 EndFunc
 

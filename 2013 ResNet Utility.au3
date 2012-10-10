@@ -11,8 +11,6 @@
 ;              "Functions" folder and they must keep the same file name and directory or the program will break (it relies on these files)
 ;           3. When adding variables, it must start with $ symbol and use capital letters for the first letter of each word in the name
 ;              Examples:    $ThisIsAVariable $MACAddressVariable, etc
-;           4. Although not perfectly implemented yet, the goal is to completely separate GUI from implementation, and localize variables as much
-;              as possible
 #include <GuiConstantsEx.au3> ; This file is provided after installing Autoit, and provides the ability to use GUI environment.
 #include <Functions\CMDFunc.au3> ;One of my files for common used funtions using command line
 #include <Functions\SMARTFunc.au3> ; A function for getting smart data, not my own code
@@ -20,9 +18,6 @@
 #RequireAdmin ;runs this program as admin, and anything it calls, has admin as well, needed for command prompt scripts
 
 local $CurrentVersion = "0.3.0" ; Current version of the software
-local $Tab1,$Tab2,$Tab3 ; Declare Tab item variables
-local $OSEd,$SyTy,$SePa,$WaBr,$WaMa,$WiBr,$WiMa,$Bran,$Seri,$HsHf,$Memo,$Mode ; Declare variables to store system information
-local $Workgroup ; Declare variable to store workgroup in
 local $lblArray[12] ;Used to set color for data labels in a loop.
 
 ; Creates GUI, sets name in title bar and icon.
@@ -37,7 +32,7 @@ local $NetworkSettings = stringSplit(GET_Ethernet_and_Wireless($objWMI),"|") ;Th
 
 ; Creates Tabs
 GUICtrlCreateTab(5, 5, 700, 190) ; Creates tab group
-$Tab1 = GUICtrlCreateTabItem("Info") ;Creating the info tab
+GUICtrlCreateTabItem("Info") ;Creating the info tab
 	;Creates labels, to collect system information and present it.
 
 	;Display first two columns (OS, System Type, Service Pack)
@@ -102,7 +97,7 @@ $Tab1 = GUICtrlCreateTabItem("Info") ;Creating the info tab
 		Next
 	EndIf
 
-$Tab2 = GUICtrlCreateTabItem("Repair")
+GUICtrlCreateTabItem("Repair")
 	;Create Buttons to call repair functions (in the repair tab) The On-Click part is handled by the Case statement lower down
 	local $btnResNetwork = GUICtrlCreateButton("Reset Network",87,58,130) ; button that will perform a variety of network connection repair commands
 	local $btnRepFirewall = GUICtrlCreateButton("Repair Firewall",87,90,130) ; button to repair the windows firewall
@@ -111,14 +106,13 @@ $Tab2 = GUICtrlCreateTabItem("Repair")
 	local $btnRepPermissions = GUICtrlCreateButton("Repair Permissions",220,90,130) ; button to repair permissions on windows computers
 	local $btnFileAssociations = GUICtrlCreateButton("Fix File Associations",220,122,130) ; Runs various commands to repair file associations in the registry
 	local $btnSMARTData = GUICtrlCreateButton("Hard Drive Test",353,58,130) ; button to display SMART data for HDD troubleshooting
-$Tab3 = GUICtrlCreateTabItem("Known Fixes") ; Nothing currently under this tab [to be implemented later]
+GUICtrlCreateTabItem("Known Fixes") ; Nothing currently under this tab [to be implemented later]
 GUICtrlCreateTabItem("") ; A blank tab item indicates the end of the tab group
 
 ; Creates button row at bottom of window
-local $btnExit = GUICtrlCreateButton("Exit", 5, 200, 60, 30) ; need to remove this button and shift the other three to the left appropriately
-local $btnMAC = GUICtrlCreateButton("Manual MAC Address",70,200,120,30)
-local $btnWorkgroup = GUICtrlCreateButton("Change Workgroup",195,200,110,30)
-local $btnAddRemovePrograms = GUICtrlCreateButton("Programs and Features",310,200,130,30)
+local $btnMAC = GUICtrlCreateButton("Manual MAC Address",5,200,120,30)
+local $btnWorkgroup = GUICtrlCreateButton("Change Workgroup",130,200,110,30)
+local $btnAddRemovePrograms = GUICtrlCreateButton("Programs and Features",245,200,130,30)
 ; There is plenty of room to add other functionality here, would be a good thing to find out what can be added for automation
 
 GUISetState(@SW_SHOW) ;Command to actually display the GUI
@@ -126,28 +120,25 @@ GUISetState(@SW_SHOW) ;Command to actually display the GUI
 ; Up until this point we have seen the interface creation.  None of this previous code has any functions nor do they call the methods without this next part. 
 While 1
 	Switch GUIGetMsg()
-		Case $GUI_EVENT_CLOSE ;Closes window if program is given close signal (x at top of screen), built it 
+		Case $GUI_EVENT_CLOSE ;Closes window if program is given close signal
 			Exit ;This Exit command is what actually makes the program exit.
-		Case $btnExit ; Same, just for our custom button (probably don't need). Remove this once the Exit button has been removed.
-			Exit
-		Case $btnWorkgroup ;if this button is clicked on then it will run vvvvvvv
-			OpenWorkgroup() ;This method is located in the Function: CMDFunc on Line 131
-		Case $btnMAC ;if clicked run vvv
-			AltGetMAC() ; Alternate way to get MAC address, CMDFunc Line 6
-		Case $btnResNetwork ;if clicked run vvv
-			ResetNetwork() ;CMDFunc Line 10
-		Case $btnRepFirewall ;if clicked...
-			RepairFirewall() ;CMDFunc Line 30
-		Case $btnResFirewall ;if ...
-			ResetFirewall() ;CMDFunc Line 36
-		Case $btnRepWinUpdate ;same
-			RepairWinUpdate() ;CMDFunc Line 42
-		Case $btnFileAssociations ;same
-			FixFileAssociations() ;CMDFunc Line 114
-		Case $btnAddRemovePrograms ;same (i'm saying that in all of these seperate cases when the button is clicked it will run the proceeding function)
-			AddRemovePrograms() ;CMDFunc Line 26
-		Case $btnSMARTData 
-			Initialize_SMART()
+		Case $btnWorkgroup ;if this button is clicked
+			OpenWorkgroup() ;Opens the advanced computer settings and clicks button to change workgroup
+		Case $btnMAC ;if this button is clicked
+			AltGetMAC() ; Opens cmd prompt and types ipconfig/all
+		Case $btnResNetwork ;if this button is clicked
+			ResetNetwork() ;Runs multiple commands at cmd prompt to repair network settings
+		Case $btnRepFirewall ;if this button is clicked
+			RepairFirewall() ;runs commands to repair Windows firewall settings
+		Case $btnResFirewall ;if this button is clicked
+			ResetFirewall() ;resets any configuration done to Windows firewall
+		Case $btnRepWinUpdate ;if this button is clicked
+			RepairWinUpdate() ;Runs multiple phases of commands to repair Windows Update
+		Case $btnFileAssociations ;if this button is clicked
+			FixFileAssociations() ;Runs some commands to fix file associations (.exe, .lnk, etc)
+		Case $btnAddRemovePrograms ;if this button is clicked
+			AddRemovePrograms() ;Opens Add/Remove programs or in vista/7, Programs and features.
+		Case $btnSMARTData ;if this button is clicked
+			Initialize_SMART() ;Opens a new window with SMART information for C: drive
 	EndSwitch
-WEnd ;Case SMARTData is the last case in this while loop, Also it is the only one that uses the other Class(Func) SMARTFunc, so if we can figure out
-; if we really need SMARTFunc then we can have this entire 168 lines of code complete.
+WEnd

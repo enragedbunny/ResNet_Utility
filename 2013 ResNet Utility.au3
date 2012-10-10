@@ -9,7 +9,6 @@
 ;              "Functions" folder and they must keep the same file name and directory or the program will break (it relies on these files)
 ;           3. When adding variables, it must start with $ symbol and use capital letters for the first letter of each word in the name
 ;              Examples:    $ThisIsAVariable $MACAddressVariable, etc
-
 #include <EditConstants.au3> ;For the Tech Notes Box
 #include <GuiConstantsEx.au3> ; This file is provided after installing Autoit, and provides the ability to use GUI environment.
 #include <WindowsConstants.au3> ; Import variables for tweaking UI. Used to remove borders on GUI and potentially other things.

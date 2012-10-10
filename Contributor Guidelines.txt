@@ -1,0 +1,34 @@
+The following guidelines are 'rules' for making changes to code in this autoit project.
+It is not necessarily required to follow the following format, but it is possible that
+if you don't, I will end up correcting it or not including it in my source.
+
+The purpose of these guidelines is to ensure all code is consistent, portable (re-use),
+and understandable by anybody who wishes to edit it. They are presented in no order.
+
+GUIDELINES:
+  * Comment, Comment, Comment. This helps me and others understand what you are trying
+    to accomplish. The ';" symbol indicates comments after the symbol on any line.
+
+  * Variables in Autoit begin with the '$' symbol, additionally I prefer to add a 
+    prefix to applicable variables to indicate what they refer to. For example, buttons
+    are preceded by 'btn' in all lowercase. $btnViewWorkgroup would be the variable
+    that represents a button that opens the workgroup window in Windows. 
+
+  * Variables should also only include alphabet characters. No spaces, numbers or 
+    symbols should be used. Outside of a prefix, the beginning letter of any word, or
+    a whole acronym should be capitalized. Examples: $MACAddress, $IPAddress, $Counter,
+    $ThisIsAVariableName are all valid variables under this rule.
+
+  * Keep all variable local. There really shouldn't be an exception to this rule. If 
+    you really need to alter the value of a variable outside the initial function, use
+    the ByRef parameter on the function.
+
+  * Ideally, all code will be scalable, concise, and conform to as many 'best practices'
+    as possible. I am a novice programmer and don't know every tip and trick to 
+    programming, so if I am breaking any rules or things could be optimized to work more
+    efficiently, PLEASE let me know and either change the code yourself or give me an
+    example so I can.
+
+  * If you can do the same thing in 1 line as the 10 in practice, please do that. The
+    only exception is that if the 10 lines allow for expansion, are faster, more 
+    efficient, or otherwise better in the long run.

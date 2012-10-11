@@ -163,6 +163,7 @@ local $btnAddRemovePrograms = GUICtrlCreateButton("Programs and Features",245,50
 local $btnSave = GUICtrlCreateButton("Save",515,500,50,30) ;Button to eventually save progress No action in While loop blow as well as no function in CMDFunc
 local $btnExport = GUICtrlCreateButton("Export",570,500,65,30) ;Button for Exporting No action or fucntion yet
 local $btnUpload = GUICtrlCreateButton("Upload",640,500,65,30) ;Button for Uploading Ticket No action or function yet
+
 GUISetState(@SW_SHOW) ;Command to actually display the GUI
  
 While 1

@@ -48,7 +48,7 @@ GUICtrlCreateTabItem("Info") ;Creating the info tab
 
 	;Labels for network configuration
 	GUICtrlCreateLabel("Network Hardware",165,30) ;Heading
-	GUICtrlCreateLabel("Wired Brand:",130,52)
+	GUICtrlCreateLabel("Wired Brand:",130,52) 
 	GUICtrlCreateLabel("Wired MAC:",130,76)
 	GUICtrlCreateLabel("Wi-Fi Brand:",130,100)
 	GUICtrlCreateLabel("Wi-Fi MAC:",130,124)
@@ -110,9 +110,9 @@ GUICtrlCreateTabItem("Known Fixes") ; Nothing currently under this tab [to be im
 GUICtrlCreateTabItem("") ; A blank tab item indicates the end of the tab group
 
 ; Creates button row at bottom of window
-local $btnMAC = GUICtrlCreateButton("Manual MAC Address",5,200,120,30)
-local $btnWorkgroup = GUICtrlCreateButton("Change Workgroup",130,200,110,30)
-local $btnAddRemovePrograms = GUICtrlCreateButton("Programs and Features",245,200,130,30)
+local $btnMAC = GUICtrlCreateButton("Manual MAC Address",5,200,120,30) ;Button to open cmd prompt, type ipconfig/all, and let you manually check network settings
+local $btnWorkgroup = GUICtrlCreateButton("Change Workgroup",130,200,110,30) ;Button to open advanced computer settings, clicks change so you can manually change workgroup settings
+local $btnAddRemovePrograms = GUICtrlCreateButton("Programs and Features",245,200,130,30) ;Opens Programs and Features to manually uninstall programs
 ; There is plenty of room to add other functionality here, would be a good thing to find out what can be added for automation
 
 GUISetState(@SW_SHOW) ;Command to actually display the GUI

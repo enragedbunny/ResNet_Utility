@@ -2,7 +2,7 @@
 ; Author: Johnny Keeton
 ; Other Contributors: Alex Burgy-Vanhoose, CJ Highley, Josh Back
 ; Contact: johnny.keeton@gmail.com 
-; Date Edited: 2012.10.08
+; Date Edited: 2012.10.11
 ; Purpose: Provide WMI access to collect system information
 ; Compatability: Windows Vista/7 (probably XP, will work for Windows 8)
 
@@ -61,9 +61,9 @@ Func GET_System_Architecture($objWMI) ; Takes WMI object as input, returns Local
 	If IsObj($objItems) Then
 		For $objItem In $objItems
 			If $objItem.AddressWidth == 64 Then ;Checks to see if 64 bit or not
-				Return "64-bit"
+				Return "64-bit" ;Returns 64-bit
 			Else
-				Return "32-bit"
+				Return "32-bit" ;Returns 64-bit
 			EndIf
 		Next
 	EndIf
@@ -91,14 +91,20 @@ Func GET_Ethernet_and_Wireless($objWMI) ; Takes WMI object as input, returns Loc
 		For $objItem In $objItems
 			;The following line does some filtering. It makes sure the entry has a MAC address, and is not WiMAX, Miniport, or bluetooth.
 			If Not($objItem.MACAddress = "None") And StringInStr(String($objItem.Description),"WiMAX") = 0 And StringInStr(String($objItem.Description),"Miniport") = 0 And StringInStr(String($objItem.Description),"Bluetooth") = 0 Then
-				If Not(StringInStr($objItem.NetConnectionID,"Wireless") = 0) Then ; This automatically detects wireless adapters and collects info
-					$WifiSettings = $objItem.Description & "|" & $objItem.MACAddress
-				ElseIf Not(StringInStr($objItem.NetConnectionID,"Local") = 0) Then ; This automatically detects wired adapters and collects info
+				If Not(StringInStr($objItem.NetConnectionID,"Wireless") = 0) Then ;This automatically detects wireless adapters and collects info
+					$WifiSettings = $objItem.Description & "|" & $objItem.MACAddress & "|"
+				ElseIf Not(StringInStr($objItem.NetConnectionID,"Local") = 0) Then ;This automatically detects wired adapters and collects info
 					$WiredSettings = $objItem.Description & "|" & $objItem.MACAddress
 				EndIf
 			EndIf
 		Next
-		Return $WifiSettings & "|" & $WiredSettings ; returns wireless and wired description and MAC Address.
+		If $WifiSettings = "" Then ; If there is no wifi Adapter, loads default data
+			$WifiSettings = "No Adapter|##:##:##:##:##:##|" ;Indicates there is no adapter
+		EndIf
+		If $WiredSettings = "" Then ;If there is no wired adapter, loads default data
+			$WiredSettings = "No Adapter|##:##:##:##:##:##" ;Indicates there is no adapter
+		EndIf
+		Return $WifiSettings & $WiredSettings ; returns wireless and wired description and MAC Address.
 	EndIf
 EndFunc
 

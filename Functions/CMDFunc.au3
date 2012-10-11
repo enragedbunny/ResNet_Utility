@@ -6,12 +6,12 @@ EndFunc ;Ends Function
 
 Func ResetNetwork() ; Runs a variety of commands to repair/reset network settings to default values
 	local $i ;Declares $i variable for loop
-	local $Data = 'netsh winsock reset|' & _
-				 'netsh winsock reset catalog|' & _
-				 'netsh interface ip reset c:\int-resetlog.txt|' & _
-				 'netsh interface ip delete arpcache|' & _
-				 'ipconfig /flushdns|' & _
-				 'ipconfig /registerdns'
+	local $Data = 'netsh winsock reset|' & _                          ;Resets Winsock settings
+				 'netsh winsock reset catalog|' & _                   ;Resets Winsock catalog
+				 'netsh interface ip reset c:\int-resetlog.txt|' & _  ;Reset IP Interface settings and save a log
+				 'netsh interface ip delete arpcache|' & _            ;Delete ARP cache on all IP interfaces
+				 'ipconfig /flushdns|' & _                            ;Flush DNS
+				 'ipconfig /registerdns'                              ;Register DNS
 	local $CMD = StringSplit($Data,"|") ;Splits $Data into an array called $CMD, using | symbol as delimeter
 	
 	If IsArray($CMD) Then ;checks if $CMD is an array then runs the loop.
@@ -40,14 +40,14 @@ Func RepairWinUpdate() ; Runs three sets of commands to repair windows update
 	Local $i ;Declares $i variable for loop
 	;The first data set stops some WU services, deletes some files, renames some files/folders and changes the directory path to System32 folder
 	Local $Data1 = 'net stop bits|' & _ ;& _ continues the next line... eg: net stop bits|net stop wuauserv|...
-			     'net stop wuauserv|' & _
-			     'Del "%ALLUSERSPROFILE%\Application Data\Microsoft\Network\Downloader\qmgr*.dat"|' & _
-				 'Ren %systemroot%\SoftwareDistrobution\DataStore *.bak|' & _
-				 'Ren %systemroot%\SoftwareDistrobution\Download *.bak|' & _
-				 'Ren %systemroot%\system32\catroot2 *.bak|' & _
-				 'sc.exe sdset bits D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)|' & _
-				 'sc.exe sdset wuauserv D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)|' & _
-				 'cd /d %WINDIR%\system32'
+			     'net stop wuauserv|' & _   ;Stops wuauserv windows service
+			     'Del "%ALLUSERSPROFILE%\Application Data\Microsoft\Network\Downloader\qmgr*.dat"|' & _ ;Delete qmgr*.dat files
+				 'Ren %systemroot%\SoftwareDistrobution\DataStore *.bak|' & _ ;Rename DataStore files/Folders to *.bak
+				 'Ren %systemroot%\SoftwareDistrobution\Download *.bak|' & _ ;Rename Download Folder to Download.bak
+				 'Ren %systemroot%\system32\catroot2 *.bak|' & _ ;Rename any files/folders that begin with catroot and change to *.bak
+				 'sc.exe sdset bits D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)|' & _  ;Configure BITS settings (a windows service)
+				 'sc.exe sdset wuauserv D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;AU)(A;;CCLCSWRPWPDTLOCRRC;;;PU)|' & _ ;Configure WUAUServ settings (a windows service)
+				 'cd /d %WINDIR%\system32' ;Changes working directory in cmd prompt to run the following DLL Register commands
 	;The second data set reregisters some dll files (if present) in the system32 folder (These DLLs are required for windows update to function)
 	Local $Data2 = 'atl.dll|' & _
 				 'urlmon.dll|' & _
@@ -86,9 +86,9 @@ Func RepairWinUpdate() ; Runs three sets of commands to repair windows update
 				 'muweb.dll|' & _
 				 'wuwebv.dll'
 	;The third (and final) data set does some cleanup by resetting winsock settings and starting the windows update services back up.
-	Local $Data3 = 'netsh reset winsock|' & _
-				  'net start bits|' & _
-				  'net start wuauserv'
+	Local $Data3 = 'netsh reset winsock|' & _ ;Reset Winsock settings
+				  'net start bits|' & _ ;Start BITS windows service
+				  'net start wuauserv' ;Start wuauserv windows service
 	Local $CMD = StringSplit($Data1, "|") ;Converts $Data1 into array $CMD
 	Local $CMDReg = StringSplit($Data2, "|") ; Converts $Data2 into array $CMDReg
 	Local $CMD2 = StringSplit($Data3, "|") ; Converts $Data3 into array $CMD2
@@ -116,7 +116,7 @@ EndFunc ;Ends Function
 Func FixFileAssociations() ;Fixes file extention problems (needs to be expanded and improved a ton)
 	Local $i ;Declares $i variable for loop
 	;The following dataset is used to set file extentions back to default (alters the registry)
-	Local $Data = '.exe=exefile|' & _
+	Local $Data = '.exe=exefile|' & _ 
 			     '.bat=batfile|' & _
 				 '.reg=regfile|' & _
 				 '.com=comfile|' & _

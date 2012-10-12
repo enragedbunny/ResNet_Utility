@@ -83,9 +83,9 @@ GUICtrlCreateTabItem("Info") ;Creating the info tab
 
 	;Group for alerts
 	GUICtrlCreateGroup("Alerts",418,107,280,70)  ;Creates an alert box to display information alerts
-		GUICtrlSetBkColor(-1, 0xFF0000)
+		GUICtrlSetBkColor(-1, 0xFF0000) ;Makes the border red
 		GUICtrlCreateLabel("",424,130,100,12) ;Shows up only if workgroup is not ResNet
-		GUICtrlSetColor(-1,0xFF0000)
+		GUICtrlSetColor(-1,0xFF0000) ;sets the color of the workgroup alert to red
 		;$IPAd = GUICtrlCreateLabel("",424,124,100,12) ;Will warn if IP address does not match filter [To be implemented later]
 		;GUICtrlSetColor(-1,0xFF0000) ; Uncomment this when IPaddress filtering works
 	GUICtrlCreateGroup("",-99,-99,1,1)

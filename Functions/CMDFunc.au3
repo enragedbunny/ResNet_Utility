@@ -54,8 +54,8 @@ Func RepairWinUpdate() ; Runs three sets of commands to repair windows update
 				 'mshtml.dll|' & _
 				 'shdocvw.dll|' & _
 				 'browseui.dll|' & _
-				 'jscript.dll|' & _
-				 'vbscript.dll|' & _
+				 'jscript.dll|' & _  ;DLL file associated with javascript
+				 'vbscript.dll|' & _ ;DLL file associated with vbscript
 				 'scrrun.dll|' & _
 				 'msxml.dll|' & _
 				 'msxml3.dll|' & _
@@ -116,13 +116,13 @@ EndFunc ;Ends Function
 Func FixFileAssociations() ;Fixes file extention problems (needs to be expanded and improved a ton)
 	Local $i ;Declares $i variable for loop
 	;The following dataset is used to set file extentions back to default (alters the registry)
-	Local $Data = '.exe=exefile|' & _ 
-			     '.bat=batfile|' & _
-				 '.reg=regfile|' & _
-				 '.com=comfile|' & _
-				 '.xml=xmlfile|' & _
-				 '.lnk=lnkfile|' & _
-				 '.ico=icofile|'
+	Local $Data = '.exe=exefile|' & _  ;creates an association between .exe extensions and the program that opens exe Files
+			     '.bat=batfile|' & _   ;creates an association between .bat extensions and the program that opens bat Files
+				 '.reg=regfile|' & _   ;creates an association between .reg extensiosn and the program that opens reg Files
+				 '.com=comfile|' & _   ;creates an association between .com extensions and the program that opens com Files
+				 '.xml=xmlfile|' & _   ;creates an association between .xml extensions and the program that opens xml Files
+				 '.lnk=lnkfile|' & _   ;creates an association between .lnk (shortcuts) extensions and the program that opens lnk Files
+				 '.ico=icofile|'       ;creates an association between .ico (icons) extensions and the program that opens ico Files
 	Local $CMD = StringSplit($Data, "|") ;String split saves length of array as CMD[0] in the array.
 	If IsArray($CMD) Then ;Checks if $CMD was properly created as array
 		For $i = 1 to $CMD[0] ;Loops from 1 to end of array ($CMD[0] contains the length of the array.

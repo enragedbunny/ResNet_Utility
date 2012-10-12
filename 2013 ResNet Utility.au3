@@ -82,7 +82,7 @@ GUICtrlCreateTabItem("Info") ;Creating the info tab
 
 
 	;Group for alerts
-	GUICtrlCreateGroup("Alerts",418,107,280,70)
+	GUICtrlCreateGroup("Alerts",418,107,280,70)  ;Creates an alert box to display information alerts
 		GUICtrlSetBkColor(-1, 0xFF0000)
 		GUICtrlCreateLabel("",424,130,100,12) ;Shows up only if workgroup is not ResNet
 		GUICtrlSetColor(-1,0xFF0000)
@@ -91,9 +91,9 @@ GUICtrlCreateTabItem("Info") ;Creating the info tab
 	GUICtrlCreateGroup("",-99,-99,1,1)
    
 	local $i ;declares variable for loop
-	If IsArray($lblArray) Then
-		For $i = 0 to 11
-			GUICtrlSetColor($lblArray[$i],0x0000FF)
+	If IsArray($lblArray) Then ;Makes sure the array was created correctly
+		For $i = 0 to 11 ;Loops through the data labels (created as array previously)
+			GUICtrlSetColor($lblArray[$i],0x0000FF) ;Sets the color of the text for 'data' in the GUI to blue
 		Next
 	EndIf
 

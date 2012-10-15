@@ -1,7 +1,7 @@
 ***********************************************************************
 Program: ResNet Utility
 Created by: Johnny Keeton
-Other Contributors: Alex Burgy-Vanhoose, Josh Back, CJ Highley
+Other Contributors: Joseph Vanhoose, Josh Back, CJ Highley
 Last Edited: 2012-10-07
 Written in: Autoit
 Compatability: Windows Vista/7

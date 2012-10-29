@@ -179,18 +179,25 @@ While 1
 			_SendMessage($rGUI, $WM_SYSCOMMAND, $SC_DRAGMOVE, 0)
 		Case $btnWorkgroup ;if this button is clicked
 			OpenWorkgroup() ;Opens the advanced computer settings and clicks button to change workgroup
+
 		Case $btnMAC ;if this button is clicked
 			AltGetMAC() ; Opens cmd prompt and types ipconfig/all
+
 		Case $btnResNetwork ;if this button is clicked
 			ResetNetwork() ;Runs multiple commands at cmd prompt to repair network settings
+
 		Case $btnRepFirewall ;if this button is clicked
 			RepairFirewall() ;runs commands to repair Windows firewall settings
+
 		Case $btnResFirewall ;if this button is clicked
 			ResetFirewall() ;resets any configuration done to Windows firewall
+
 		Case $btnRepWinUpdate ;if this button is clicked
 			RepairWinUpdate() ;Runs multiple phases of commands to repair Windows Update
+
 		Case $btnFileAssociations ;if this button is clicked
 			FixFileAssociations() ;Runs some commands to fix file associations (.exe, .lnk, etc)
+
 		Case $btnAddRemovePrograms ;if this button is clicked
 			AddRemovePrograms() ;Opens Add/Remove programs or in vista/7, Programs and features.
 		;Case $btnSMARTData ;if this button is clicked

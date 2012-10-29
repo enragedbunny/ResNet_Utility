@@ -30,6 +30,18 @@ local $OSInformation = stringsplit(GET_OS_and_Service_Pack($objWMI),"|") ;Values
 local $BrandModel = stringsplit(GET_Manufacturer_and_Model($objWMI),"|") ;Values are as follows (Computer Manufacturer, Model Number)
 local $NetworkSettings = stringSplit(GET_Ethernet_and_Wireless($objWMI),"|") ;The values as follows (Wifi Description, Wifi MAC Address, Wired Description, Wired MAC Address)
 
+; Creates Menu Bar 
+$FileMenu = GUICtrlCreateMenu("&File")
+GUICtrlCreateMenuItem("Open",$FileMenu)
+GUICtrlCreateMenuItem("Save",$FileMenu)
+GUICtrlCreateMenuItem("E&xit",$FileMenu)
+$ToolsMenu = GUICtrlCreateMenu("&Tools")
+GUICtrlCreateMenuItem("&Preferences",$ToolsMenu)
+GUICtrlCreateMenuItem("Restart Windows",$ToolsMenu)
+$HelpMenu = GUICtrlCreateMenu("Help")
+GUICtrlCreateMenuItem("About",$HelpMenu)
+GUICtrlCreateMenu("Help",$HelpMenu)
+
 ; Creates Tabs
 GUICtrlCreateTab(5, 5, 700, 190) ; Creates tab group
 GUICtrlCreateTabItem("Info") ;Creating the info tab

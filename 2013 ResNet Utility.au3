@@ -1,11 +1,9 @@
-; 1st Program I think is easiest to figure out what is going on, and get an idea of some Autoit script, and have the ResNet tool running to learn.
 ; Program: ResNet Tool
-; Version: 0.3.0
+; Version: 0.3.1
 ; Author: Johnny Keeton
 ; Other Contributors: Alex Burgy-Vanhoose, CJ Highley, Josh Back
 ; Contact: johnny.keeton@gmail.com [Please everyone add their contact email in this section]
-; Date Edited: 2012.10.06
-; Purpose:
+; Date Edited: 2012.10.29
 ; Notes:	1. When placing items, the order is (px from left, px from top, length, height), all sections of this not required
 ;			2. This program uses external functions, namely CMDFunc.au3, SMARTFunc.au3, SystemInfoFunc.au3 (these are the other files under the
 ;              "Functions" folder and they must keep the same file name and directory or the program will break (it relies on these files)
@@ -17,7 +15,7 @@
 #include <Functions\SystemInfoFunc.au3> ;My function for getting system info
 #RequireAdmin ;runs this program as admin, and anything it calls, has admin as well, needed for command prompt scripts
 
-local $CurrentVersion = "0.3.0" ; Current version of the software
+local $CurrentVersion = "0.3.1" ; Current version of the software
 local $lblArray[12] ;Used to set color for data labels in a loop.
 
 ; Creates GUI, sets name in title bar and icon.
@@ -31,16 +29,23 @@ local $BrandModel = stringsplit(GET_Manufacturer_and_Model($objWMI),"|") ;Values
 local $NetworkSettings = stringSplit(GET_Ethernet_and_Wireless($objWMI),"|") ;The values as follows (Wifi Description, Wifi MAC Address, Wired Description, Wired MAC Address)
 
 ; Creates Menu Bar 
-$FileMenu = GUICtrlCreateMenu("&File")
-GUICtrlCreateMenuItem("Open",$FileMenu)
-GUICtrlCreateMenuItem("Save",$FileMenu)
-GUICtrlCreateMenuItem("E&xit",$FileMenu)
-$ToolsMenu = GUICtrlCreateMenu("&Tools")
-GUICtrlCreateMenuItem("&Preferences",$ToolsMenu)
-GUICtrlCreateMenuItem("Restart Windows",$ToolsMenu)
-$HelpMenu = GUICtrlCreateMenu("Help")
-GUICtrlCreateMenuItem("About",$HelpMenu)
-GUICtrlCreateMenu("Help",$HelpMenu)
+$mnuFileMenu     = GUICtrlCreateMenu("&File")
+$mnuOpenTicket   = GUICtrlCreateMenuItem("Open",$mnuFileMenu)
+$mnuSaveTicket   = GUICtrlCreateMenuItem("Save",$mnuFileMenu)
+$mnuExitProgram  = GUICtrlCreateMenuItem("E&xit",$mnuFileMenu)
+
+$mnuViewMenu     = GUICtrlCreateMenu("&View")
+$mnuChecklist    = GUICtrlCreateMenuItem("Checklist Pane")
+$mnuTechNotes    = GUICtrlCreateMenuItem("External Tech Notes Pane")
+$mnuTroubleshoot = GUICtrlCreateMenuItem("Troubleshooting Pane") 
+
+$mnuToolsMenu    = GUICtrlCreateMenu("&Tools")
+$mnuPreferences  = GUICtrlCreateMenuItem("&Preferences",$mnuToolsMenu)
+$mnuRestart      = GUICtrlCreateMenuItem("Restart Windows",$mnuToolsMenu)
+
+$mnuHelpMenu     = GUICtrlCreateMenu("Help")
+$mnuAbout        = GUICtrlCreateMenuItem("About",$mnuHelpMenu)
+$mnuHelp         = GUICtrlCreateMenu("Help",$mnuHelpMenu)
 
 ; Creates Tabs
 GUICtrlCreateTab(5, 5, 700, 190) ; Creates tab group
@@ -73,7 +78,7 @@ GUICtrlCreateTabItem("Info") ;Creating the info tab
 	$lblArray[6] = GUICtrlCreateLabel($NetworkSettings[2],200,124,100) ;Wireless MAC Address
 	;GUICtrlCreateLabel("xxxx",180,178) ;Add Later, not currently implemented
 
-	;Labels for Vendor informatrion and System Specs
+	;Labels for Vendor information and System Specs
 	GUICtrlCreateLabel("Vendor Information",300,30) ;Heading
 	GUICtrlCreateLabel("Brand:",300,52)
 	GUICtrlCreateLabel("Serial#:",300,76)
@@ -132,25 +137,62 @@ GUISetState(@SW_SHOW) ;Command to actually display the GUI
 ; Up until this point we have seen the interface creation.  None of this previous code has any functions nor do they call the methods without this next part. 
 While 1
 	Switch GUIGetMsg()
-		Case $GUI_EVENT_CLOSE ;Closes window if program is given close signal
+		Case $GUI_EVENT_CLOSE or $mnuExitProgram;Closes window if program is given close signal
 			Exit ;This Exit command is what actually makes the program exit.
+
 		Case $btnWorkgroup ;if this button is clicked
 			OpenWorkgroup() ;Opens the advanced computer settings and clicks button to change workgroup
+
 		Case $btnMAC ;if this button is clicked
 			AltGetMAC() ; Opens cmd prompt and types ipconfig/all
+
 		Case $btnResNetwork ;if this button is clicked
 			ResetNetwork() ;Runs multiple commands at cmd prompt to repair network settings
+
 		Case $btnRepFirewall ;if this button is clicked
 			RepairFirewall() ;runs commands to repair Windows firewall settings
+
 		Case $btnResFirewall ;if this button is clicked
 			ResetFirewall() ;resets any configuration done to Windows firewall
+
 		Case $btnRepWinUpdate ;if this button is clicked
 			RepairWinUpdate() ;Runs multiple phases of commands to repair Windows Update
+
 		Case $btnFileAssociations ;if this button is clicked
 			FixFileAssociations() ;Runs some commands to fix file associations (.exe, .lnk, etc)
+
 		Case $btnAddRemovePrograms ;if this button is clicked
 			AddRemovePrograms() ;Opens Add/Remove programs or in vista/7, Programs and features.
+
 		Case $btnSMARTData ;if this button is clicked
 			Initialize_SMART() ;Opens a new window with SMART information for C: drive
+
+		Case $mnuOpenTicket ;if this menu item is clicked
+			OpenTicket() ;Loads ticket into window
+
+		Case $mnuSaveTicket ;if this menu item is clicked
+			SaveTicket() ;Saves current form into ticket file
+
+		Case $mnuPreferences ;if this menu item is clicked
+			CreatePreferencesWindow() ;Creates GUI to set defaults and window preferences
+
+		Case $mnuRestart ;if this menu item is clicked
+			SaveTicket() ;Saves current form into ticket file
+			RestartPC() ;Restarts PC
+
+		Case mnuChecklist ;if this menu item is clicked
+			CreateChecklistWindow() ;Creates GUI checklist for walk-in/drop-off procedure
+
+		Case mnuTechNotes ;if this menu item is clicked
+			CreateTechNotesWindow() ; Move tech notes to external window
+
+		Case mnuTroubleshoot ;if this menu item is clicked
+			CreateTroubleshootWindow() ;Creates GUI for network troubleshooting
+
+		Case $mnuAbout ;if this menu item is clicked
+			CreateAboutWindow() ;Displays program information
+
+		Case $mnuHelp ;if this menu item is clicked
+			CreateHelpWindow() ;Displays information about how to use software
 	EndSwitch
 WEnd

@@ -72,7 +72,7 @@ Func GET_OS_and_Service_Pack($objWMI) ; Takes WMI object as input, returns Local
 	local $objItems = $objWMI.ExecQuery("SELECT * FROM Win32_OperatingSystem", "WQL", 0x10 + 0x20) ;query WMI to retrieve Win32_OperatingSystem
 	If IsObj($objItems) Then
 		For $objItem In $objItems
-			If $objItem.BuildNumber >= 8000 Then ;Checks for Windows 8
+			ElseIf $objItem.BuildNumber >= 9200 Then ;Checks for Windows 8
 				Return "Win 8" & "|" & String(Int($objItem.BuildNumber)-7600) ;Returns OS and strips service pack from build number
 			ElseIf $objItem.BuildNumber >= 7600 Then ;Checks for Win 7 OS
 				Return "Win 7" & "|" & String(Int($objItem.BuildNumber)-7600) ;Returns OS and Strips service pack from build number

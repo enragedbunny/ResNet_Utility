@@ -180,7 +180,7 @@ Func _PartitionToPhysicalDriveID($vPart)
 		For $objItem In $colItems
 			If $objItem.Dependent == $vPart then
 				$vPdisk = $objItem.Antecedent ; saves data from query to string
-				$vPdisk = StringReplace(StringTrimLeft($vPdisk,Stringinstr($vPdisk,"=")),'"',"") ; formats string
+				$vPdisk = StringReplace(StringTrimLeft($vPdisk,Stringinstr($vPdisk,"=")),'""',"") ; formats string
 				$strDeviceID = StringReplace($vPdisk, "\\", "\") ; more formatting
 				Return $strDeviceID ; sends physical drive ID 
 			Endif

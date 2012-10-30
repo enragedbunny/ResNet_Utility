@@ -90,9 +90,9 @@ Func GET_Ethernet_and_Wireless($objWMI) ; Takes WMI object as input, returns Loc
 		For $objItem In $objItems
 			;The following line does some filtering. It makes sure the entry has a MAC address, and is not WiMAX, Miniport, or bluetooth.
 			If Not($objItem.MACAddress = "None") And StringInStr(String($objItem.Description),"WiMAX") = 0 And StringInStr(String($objItem.Description),"Miniport") = 0 And StringInStr(String($objItem.Description),"Bluetooth") = 0 Then
-				If Not(StringInStr($objItem.NetConnectionID,"Wireless") = 0) Then ;This automatically detects wireless adapters and collects info
+				If Not(StringInStr($objItem.NetConnectionID,"Wireless") = 0) or Not(StringInStr($objItem.NetConnectionID,"Wi-Fi") = 0) Then ;This automatically detects wireless adapters and collects info
 					$WifiSettings = $objItem.Description & "|" & $objItem.MACAddress & "|"
-				ElseIf Not(StringInStr($objItem.NetConnectionID,"Local") = 0) Then ;This automatically detects wired adapters and collects info
+				ElseIf Not(StringInStr($objItem.NetConnectionID,"Local") = 0) or Not(StringInStr($objItem.NetConnectionID,"Ethernet") = 0) Then ;This automatically detects wired adapters and collects info
 					$WiredSettings = $objItem.Description & "|" & $objItem.MACAddress ;Formats network information as "Description|MACAddress" may need further processing if used in other programs.
 				EndIf
 			EndIf

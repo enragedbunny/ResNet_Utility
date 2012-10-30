@@ -13,13 +13,14 @@
 #include <Functions\CMDFunc.au3> ;One of my files for common used funtions using command line
 #include <Functions\SMARTFunc.au3> ; A function for getting smart data, not my own code
 #include <Functions\SystemInfoFunc.au3> ;My function for getting system info
+#include <Functions\PreferencesWindow.au3> ;My Function for displaying the preferences window
 #RequireAdmin ;runs this program as admin, and anything it calls, has admin as well, needed for command prompt scripts
 
 local $CurrentVersion = "0.3.1" ; Current version of the software
 local $lblArray[12] ;Used to set color for data labels in a loop.
 
 ; Creates GUI, sets name in title bar and icon.
-GUICreate("ResNet Utility " & $CurrentVersion, 710, 235) ;Created the GUI form and the size
+GUICreate("ResNet Utility " & $CurrentVersion, 710, 255) ;Created the GUI form and the size
 GUISetIcon("resnet.ico", 0) ;Sets the icon for the window title bar (Should be in the same directory as this file, with this name!)
 local $objWMI = ObjGet("winmgmts:\\localhost\root\CIMV2") ;Create connection to WMI
 
@@ -29,23 +30,23 @@ local $BrandModel = stringsplit(GET_Manufacturer_and_Model($objWMI),"|") ;Values
 local $NetworkSettings = stringSplit(GET_Ethernet_and_Wireless($objWMI),"|") ;The values as follows (Wifi Description, Wifi MAC Address, Wired Description, Wired MAC Address)
 
 ; Creates Menu Bar 
-$mnuFileMenu     = GUICtrlCreateMenu("&File")
-$mnuOpenTicket   = GUICtrlCreateMenuItem("Open",$mnuFileMenu)
-$mnuSaveTicket   = GUICtrlCreateMenuItem("Save",$mnuFileMenu)
-$mnuExitProgram  = GUICtrlCreateMenuItem("E&xit",$mnuFileMenu)
+$mnuFileMenu     = GUICtrlCreateMenu("&File") ;File menu
+$mnuOpenTicket   = GUICtrlCreateMenuItem("Open",$mnuFileMenu) ;Open a ticket from a selected file
+$mnuSaveTicket   = GUICtrlCreateMenuItem("Save",$mnuFileMenu) ;Save current form as a ticket
+$mnuExitProgram  = GUICtrlCreateMenuItem("E&xit",$mnuFileMenu) ;Exit the software (Will not autosave ticket unless pref is set to do so (default to save))
 
-$mnuViewMenu     = GUICtrlCreateMenu("&View")
-$mnuChecklist    = GUICtrlCreateMenuItem("Checklist Pane")
-$mnuTechNotes    = GUICtrlCreateMenuItem("External Tech Notes Pane")
-$mnuTroubleshoot = GUICtrlCreateMenuItem("Troubleshooting Pane") 
+$mnuViewMenu     = GUICtrlCreateMenu("&View") ;View menu
+$mnuChecklist    = GUICtrlCreateMenuItem("Checklist Pane",$mnuViewMenu) ;Opens checklist pane
+$mnuTechNotes    = GUICtrlCreateMenuItem("External Tech Notes Pane",$mnuViewMenu) ;Moves Tech Notes to external window
+$mnuTroubleshoot = GUICtrlCreateMenuItem("Troubleshooting Pane",$mnuViewMenu) ;Opens troubleshooting pane
 
-$mnuToolsMenu    = GUICtrlCreateMenu("&Tools")
-$mnuPreferences  = GUICtrlCreateMenuItem("&Preferences",$mnuToolsMenu)
-$mnuRestart      = GUICtrlCreateMenuItem("Restart Windows",$mnuToolsMenu)
+$mnuToolsMenu    = GUICtrlCreateMenu("&Tools") ;Tools menu
+$mnuPreferences  = GUICtrlCreateMenuItem("&Preferences",$mnuToolsMenu) ;Opens the preferences window
+$mnuRestart      = GUICtrlCreateMenuItem("Save and Restart",$mnuToolsMenu) ;Saves form and Restart PC
 
-$mnuHelpMenu     = GUICtrlCreateMenu("Help")
-$mnuAbout        = GUICtrlCreateMenuItem("About",$mnuHelpMenu)
-$mnuHelp         = GUICtrlCreateMenu("Help",$mnuHelpMenu)
+$mnuHelpMenu     = GUICtrlCreateMenu("Help") ;Help Menu
+$mnuAbout        = GUICtrlCreateMenuItem("About",$mnuHelpMenu) ;Opens about window showing version information
+$mnuHelp         = GUICtrlCreateMenu("Help",$mnuHelpMenu) ;Opens help file for assistance using the program
 
 ; Creates Tabs
 GUICtrlCreateTab(5, 5, 700, 190) ; Creates tab group
@@ -137,7 +138,7 @@ GUISetState(@SW_SHOW) ;Command to actually display the GUI
 ; Up until this point we have seen the interface creation.  None of this previous code has any functions nor do they call the methods without this next part. 
 While 1
 	Switch GUIGetMsg()
-		Case $GUI_EVENT_CLOSE or $mnuExitProgram;Closes window if program is given close signal
+		Case $GUI_EVENT_CLOSE ;Closes window if program is given close signal
 			Exit ;This Exit command is what actually makes the program exit.
 
 		Case $btnWorkgroup ;if this button is clicked
@@ -180,13 +181,13 @@ While 1
 			SaveTicket() ;Saves current form into ticket file
 			RestartPC() ;Restarts PC
 
-		Case mnuChecklist ;if this menu item is clicked
+		Case $mnuChecklist ;if this menu item is clicked
 			CreateChecklistWindow() ;Creates GUI checklist for walk-in/drop-off procedure
 
-		Case mnuTechNotes ;if this menu item is clicked
+		Case $mnuTechNotes ;if this menu item is clicked
 			CreateTechNotesWindow() ; Move tech notes to external window
 
-		Case mnuTroubleshoot ;if this menu item is clicked
+		Case $mnuTroubleshoot ;if this menu item is clicked
 			CreateTroubleshootWindow() ;Creates GUI for network troubleshooting
 
 		Case $mnuAbout ;if this menu item is clicked

@@ -6,14 +6,20 @@
 ; Purpose: Provide WMI access to collect system information
 ; Compatability: Windows Vista/7 (probably XP, will work for Windows 8)
 
-Func GET_Device_Manager_Errors($objWMI) ;retrieve device manager errors (not implemented yet) will not return errors, but instead return if there are errors or not
+Func GET_Device_Manager_Errors($objWMI) ;retrieve device manager errors (Coded, NOT tested) will not return errors, but instead tell you if there are any
 	$objItems = $objWMI.ExecQuery("SELECT * FROM Win32_PnPEntity WHERE ConfigManagerErrorCode <> 0", "WQL", 0x10 + 0x20) ;query WMI to retrieve Win32_PnPEntity
 	If IsObj($objItems) Then
+		$DMErrors = "Errors Exist"
 		For $objItem In $objItems
-			;report that errors exist
+			$DMErrors = $SmErrors & "|" & $objItem.Caption
 		Next
+	Else
+		$DMErrors = "None"
 	EndIf
+	Local $DMErrArray = StringSplit($DMErrors,"|")
+	Return $DMErrArray
 EndFunc
+
 Func GET_Manufacturer_and_Model($objWMI) ; Takes WMI object as input, returns Local System's Manufacturer and Model
 	$objItems = $objWMI.ExecQuery("SELECT * FROM Win32_ComputerSystem", "WQL", 0x10 + 0x20) ;query WMI to retrieve Win32_ComputerSystem
 	If IsObj($objItems) Then
@@ -72,8 +78,8 @@ Func GET_OS_and_Service_Pack($objWMI) ; Takes WMI object as input, returns Local
 	local $objItems = $objWMI.ExecQuery("SELECT * FROM Win32_OperatingSystem", "WQL", 0x10 + 0x20) ;query WMI to retrieve Win32_OperatingSystem
 	If IsObj($objItems) Then
 		For $objItem In $objItems
-			ElseIf $objItem.BuildNumber >= 9200 Then ;Checks for Windows 8
-				Return "Win 8" & "|" & String(Int($objItem.BuildNumber)-7600) ;Returns OS and strips service pack from build number
+			If $objItem.BuildNumber >= 9200 Then ;Checks for Windows 8
+				Return "Win 8" & "|" & String(Int($objItem.BuildNumber)-9200) ;Returns OS and strips service pack from build number
 			ElseIf $objItem.BuildNumber >= 7600 Then ;Checks for Win 7 OS
 				Return "Win 7" & "|" & String(Int($objItem.BuildNumber)-7600) ;Returns OS and Strips service pack from build number
 			ElseIf	$objItem.BuildNumber >= 6000 Then ;Checks for Windows Vista os

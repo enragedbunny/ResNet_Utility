@@ -46,7 +46,7 @@ Func CreatePreferencesWindow()
 	While 1
 		Switch GUIGetMsg()
 			Case $GUI_EVENT_CLOSE;Closes window if program is given
-				GUIDelete($PreferencesWindow)
+				GUIDelete($PreferencesWindow) ;This Exit command is what actually makes the program exit.
 				Return
 			Case $btnCancel
 				GUIDelete($PreferencesWindow)

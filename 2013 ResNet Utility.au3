@@ -173,33 +173,30 @@ While 1
 		;Case $Edit1	
 		Case $GUI_EVENT_CLOSE ;Closes window if program is given close signal
 			Exit ;This Exit command is what actually makes the program exit.
+<<<<<<< HEAD
 		Case $mnuExitProgram
 			Exit ;This Exit command is what actually makes the program exit.
 		Case $GUI_EVENT_PRIMARYDOWN
 			_SendMessage($rGUI, $WM_SYSCOMMAND, $SC_DRAGMOVE, 0)
+=======
+>>>>>>> Fixed some errors
 		Case $btnWorkgroup ;if this button is clicked
 			OpenWorkgroup() ;Opens the advanced computer settings and clicks button to change workgroup
-
 		Case $btnMAC ;if this button is clicked
 			AltGetMAC() ; Opens cmd prompt and types ipconfig/all
-
 		Case $btnResNetwork ;if this button is clicked
 			ResetNetwork() ;Runs multiple commands at cmd prompt to repair network settings
-
 		Case $btnRepFirewall ;if this button is clicked
 			RepairFirewall() ;runs commands to repair Windows firewall settings
-
 		Case $btnResFirewall ;if this button is clicked
 			ResetFirewall() ;resets any configuration done to Windows firewall
-
 		Case $btnRepWinUpdate ;if this button is clicked
 			RepairWinUpdate() ;Runs multiple phases of commands to repair Windows Update
-
 		Case $btnFileAssociations ;if this button is clicked
 			FixFileAssociations() ;Runs some commands to fix file associations (.exe, .lnk, etc)
-
 		Case $btnAddRemovePrograms ;if this button is clicked
 			AddRemovePrograms() ;Opens Add/Remove programs or in vista/7, Programs and features.
+<<<<<<< HEAD
 		;Case $btnSMARTData ;if this button is clicked
 			;Initialize_SMART() ;Opens a new window with SMART information for C: drive
 		;Case $mnuOpenTicket ;if this menu item is clicked
@@ -219,6 +216,27 @@ While 1
 			;CreateTroubleshootWindow() ;Creates GUI for network troubleshooting
 		Case $mnuAbout ;if this menu item is clicked
 			CreateAboutWindow($ProgramTitle,$Version,$ReleaseDate) ;Displays program information
+=======
+		Case $btnSMARTData ;if this button is clicked
+			Initialize_SMART() ;Opens a new window with SMART information for C: drive
+		Case $mnuOpenTicket ;if this menu item is clicked
+			OpenTicket() ;Loads ticket into window
+		Case $mnuSaveTicket ;if this menu item is clicked
+			SaveTicket() ;Saves current form into ticket file
+		Case $mnuPreferences ;if this menu item is clicked
+			CreatePreferencesWindow() ;Creates GUI to set defaults and window preferences
+		Case $mnuRestart ;if this menu item is clicked
+			SaveTicket() ;Saves current form into ticket file
+			RestartPC() ;Restarts PC
+		Case $mnuChecklist ;if this menu item is clicked
+			CreateChecklistWindow() ;Creates GUI checklist for walk-in/drop-off procedure
+		Case $mnuTechNotes ;if this menu item is clicked
+			CreateTechNotesWindow() ; Move tech notes to external window
+		Case $mnuTroubleshoot ;if this menu item is clicked
+			CreateTroubleshootWindow() ;Creates GUI for network troubleshooting
+		Case $mnuAbout ;if this menu item is clicked
+			CreateAboutWindow() ;Displays program information
+>>>>>>> Fixed some errors
 		Case $mnuHelp ;if this menu item is clicked
 			CreateHelpWindow($HelpFile) ;Displays information about how to use software
 	EndSwitch

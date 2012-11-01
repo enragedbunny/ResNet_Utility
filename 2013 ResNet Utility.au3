@@ -14,13 +14,16 @@
 #include <Functions\SMARTFunc.au3> ; A function for getting smart data, not my own code
 #include <Functions\SystemInfoFunc.au3> ;My function for getting system info
 #include <Functions\PreferencesWindow.au3> ;My Function for displaying the preferences window
+#include <Functions\AboutHelp.au3> ;My function for displaying about and help windows.
 #RequireAdmin ;runs this program as admin, and anything it calls, has admin as well, needed for command prompt scripts
 
-local $CurrentVersion = "0.3.1" ; Current version of the software
+local $ProgramTitle = "ResNet Utility"
+local $Version = "0.3.1" ; Current version of the software
+local $ReleaseDate = "2012.11.2"
 local $lblArray[12] ;Used to set color for data labels in a loop.
 
 ; Creates GUI, sets name in title bar and icon.
-GUICreate("ResNet Utility " & $CurrentVersion, 710, 255) ;Created the GUI form and the size
+GUICreate("ResNet Utility " & $Version, 710, 255) ;Created the GUI form and the size
 GUISetIcon("resnet.ico", 0) ;Sets the icon for the window title bar (Should be in the same directory as this file, with this name!)
 local $objWMI = ObjGet("winmgmts:\\localhost\root\CIMV2") ;Create connection to WMI
 
@@ -60,7 +63,7 @@ GUICtrlCreateTabItem("Info") ;Creating the info tab
 	GUICtrlCreateLabel("Service Pack:",12,100) ;100 are the height^
 
 	;Creates labels to contain data
-	$lblArray[0] = GUICtrlCreateLabel($OSInformation[1],83,52) ;OS Edition (Windows 8, Windows 7, Windows Vista
+	$lblArray[0] = GUICtrlCreateLabel($OSInformation[1],83,52) ;OS Edition (Windows 8, Windows 7, Windows Vista)
 	$lblArray[1] = GUICtrlCreateLabel(GET_System_Architecture($objWMI),83,76) ;32 or 64-bit
 	$lblArray[2] = GUICtrlCreateLabel($OSInformation[2],83,100) ;Service pack version installed
 
@@ -174,7 +177,7 @@ While 1
 		Case $mnuTroubleshoot ;if this menu item is clicked
 			CreateTroubleshootWindow() ;Creates GUI for network troubleshooting
 		Case $mnuAbout ;if this menu item is clicked
-			CreateAboutWindow() ;Displays program information
+			CreateAboutWindow($ProgramTitle,$Version,$ReleaseDate) ;Displays program information
 		Case $mnuHelp ;if this menu item is clicked
 			CreateHelpWindow() ;Displays information about how to use software
 	EndSwitch

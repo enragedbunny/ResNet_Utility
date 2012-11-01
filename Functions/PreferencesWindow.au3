@@ -17,6 +17,7 @@ Func CreatePreferencesWindow()
 	
 	GUICtrlCreateCheckbox("Autosave ticket when closing program?",5,30)
 	Local $AutoSave = IniRead($ConfigPath,"Preferences","AutoSave_On_Close","NotFound")
+
 	If Not($AutoSave = "NotFound") Then
 		If $AutoSave = 1 Then
 			GUICtrlSetState(-1,$GUI_CHECKED)
@@ -31,6 +32,7 @@ Func CreatePreferencesWindow()
 	
 	GUICtrlCreateCheckbox("Automatically load tickets found in temp dir?",5,101)
 	Local $AutoLoad = IniRead($ConfigPath,"Preferences","AutoLoad_Ticket","NotFound")
+
 	If Not($AutoLoad = "NotFound") Then
 		If $AutoLoad = 1 Then
 			GUICtrlSetState(-1,$GUI_CHECKED)

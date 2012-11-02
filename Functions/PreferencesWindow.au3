@@ -1,7 +1,11 @@
 ; Author: Johnny Keeton
 ; Other Contributors: Alex Burgy-Vanhoose, CJ Highley, Josh Back
 ; Contact: johnny.keeton@gmail.com [Please everyone add their contact email in this section]
+<<<<<<< HEAD
 ; Date Edited: 2012.11.2
+=======
+; Date Edited: 2012.10.29
+>>>>>>> Cleanup and preparation for version upgrade
 
 Func CreatePreferencesWindow()
 	#Include <GuiConstantsEx.au3>
@@ -48,7 +52,7 @@ Func CreatePreferencesWindow()
 	While 1
 		Switch GUIGetMsg()
 			Case $GUI_EVENT_CLOSE;Closes window if program is given
-				GUIDelete($PreferencesWindow) ;This Exit command is what actually makes the program exit.
+				GUIDelete($PreferencesWindow)
 				Return
 			Case $btnCancel
 				GUIDelete($PreferencesWindow)

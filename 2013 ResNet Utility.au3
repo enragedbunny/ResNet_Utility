@@ -1,27 +1,31 @@
-; 1st Program I think is easiest to figure out what is going on, and get an idea of some Autoit script, and have the ResNet tool running to learn.
 ; Program: ResNet Tool
-; Version: 0.3.0
+; Version: 0.3.1
 ; Author: Johnny Keeton
 ; Other Contributors: Alex Burgy-Vanhoose, CJ Highley, Josh Back
 ; Contact: johnny.keeton@gmail.com [Please everyone add their contact email in this section]
-; Date Edited: 2012.10.06
-; Purpose:
+; Date Edited: 2012.10.29
 ; Notes:	1. When placing items, the order is (px from left, px from top, length, height), all sections of this not required
 ;			2. This program uses external functions, namely CMDFunc.au3, SMARTFunc.au3, SystemInfoFunc.au3 (these are the other files under the
 ;              "Functions" folder and they must keep the same file name and directory or the program will break (it relies on these files)
 ;           3. When adding variables, it must start with $ symbol and use capital letters for the first letter of each word in the name
 ;              Examples:    $ThisIsAVariable $MACAddressVariable, etc
+
 #include <GuiConstantsEx.au3> ; This file is provided after installing Autoit, and provides the ability to use GUI environment.
 #include <Functions\CMDFunc.au3> ;One of my files for common used funtions using command line
 #include <Functions\SMARTFunc.au3> ; A function for getting smart data, not my own code
 #include <Functions\SystemInfoFunc.au3> ;My function for getting system info
+#include <Functions\PreferencesWindow.au3> ;My Function for displaying the preferences window
+#include <Functions\AboutHelp.au3> ;My function for displaying about and help windows.
 #RequireAdmin ;runs this program as admin, and anything it calls, has admin as well, needed for command prompt scripts
 
-local $CurrentVersion = "0.3.0" ; Current version of the software
+local $ProgramTitle = "ResNet Utility"
+local $Version = "0.3.1" ; Current version of the software
+local $ReleaseDate = "2012.11.2"
+local $HelpFile = "README.txt"
 local $lblArray[12] ;Used to set color for data labels in a loop.
 
 ; Creates GUI, sets name in title bar and icon.
-GUICreate("ResNet Utility " & $CurrentVersion, 710, 235) ;Created the GUI form and the size
+GUICreate("ResNet Utility " & $Version, 710, 255) ;Created the GUI form and the size
 GUISetIcon("resnet.ico", 0) ;Sets the icon for the window title bar (Should be in the same directory as this file, with this name!)
 local $objWMI = ObjGet("winmgmts:\\localhost\root\CIMV2") ;Create connection to WMI
 
@@ -29,6 +33,25 @@ local $objWMI = ObjGet("winmgmts:\\localhost\root\CIMV2") ;Create connection to 
 local $OSInformation = stringsplit(GET_OS_and_Service_Pack($objWMI),"|") ;Values are as follows (Operating System, Service Pack)
 local $BrandModel = stringsplit(GET_Manufacturer_and_Model($objWMI),"|") ;Values are as follows (Computer Manufacturer, Model Number)
 local $NetworkSettings = stringSplit(GET_Ethernet_and_Wireless($objWMI),"|") ;The values as follows (Wifi Description, Wifi MAC Address, Wired Description, Wired MAC Address)
+
+; Creates Menu Bar, commented out until more is complete
+$mnuFileMenu     = GUICtrlCreateMenu("&File") ;File menu
+;$mnuOpenTicket   = GUICtrlCreateMenuItem("Open",$mnuFileMenu) ;Open a ticket from a selected file
+;$mnuSaveTicket   = GUICtrlCreateMenuItem("Save",$mnuFileMenu) ;Save current form as a ticket
+$mnuExitProgram  = GUICtrlCreateMenuItem("E&xit",$mnuFileMenu) ;Exit the software (Will not autosave ticket unless pref is set to do so (default to save))
+
+$mnuViewMenu     = GUICtrlCreateMenu("&View") ;View menu
+;$mnuChecklist    = GUICtrlCreateMenuItem("Checklist Pane",$mnuViewMenu) ;Opens checklist pane
+;$mnuTechNotes    = GUICtrlCreateMenuItem("External Tech Notes Pane",$mnuViewMenu) ;Moves Tech Notes to external window
+;$mnuTroubleshoot = GUICtrlCreateMenuItem("Troubleshooting Pane",$mnuViewMenu) ;Opens troubleshooting pane
+
+$mnuToolsMenu    = GUICtrlCreateMenu("&Tools") ;Tools menu
+$mnuPreferences  = GUICtrlCreateMenuItem("&Preferences",$mnuToolsMenu) ;Opens the preferences window
+;$mnuRestart      = GUICtrlCreateMenuItem("Save and Restart",$mnuToolsMenu) ;Saves form and Restart PC
+
+$mnuHelpMenu     = GUICtrlCreateMenu("?") ;Help Menu
+$mnuAbout        = GUICtrlCreateMenuItem("About",$mnuHelpMenu) ;Opens about window showing version information
+$mnuHelp         = GUICtrlCreateMenuItem("Help",$mnuHelpMenu) ;Opens help file for assistance using the program
 
 ; Creates Tabs
 GUICtrlCreateTab(5, 5, 700, 190) ; Creates tab group
@@ -42,7 +65,7 @@ GUICtrlCreateTabItem("Info") ;Creating the info tab
 	GUICtrlCreateLabel("Service Pack:",12,100) ;100 are the height^
 
 	;Creates labels to contain data
-	$lblArray[0] = GUICtrlCreateLabel($OSInformation[1],83,52) ;OS Edition (Windows 8, Windows 7, Windows Vista
+	$lblArray[0] = GUICtrlCreateLabel($OSInformation[1],83,52) ;OS Edition (Windows 8, Windows 7, Windows Vista)
 	$lblArray[1] = GUICtrlCreateLabel(GET_System_Architecture($objWMI),83,76) ;32 or 64-bit
 	$lblArray[2] = GUICtrlCreateLabel($OSInformation[2],83,100) ;Service pack version installed
 
@@ -61,7 +84,7 @@ GUICtrlCreateTabItem("Info") ;Creating the info tab
 	$lblArray[6] = GUICtrlCreateLabel($NetworkSettings[2],200,124,100) ;Wireless MAC Address
 	;GUICtrlCreateLabel("xxxx",180,178) ;Add Later, not currently implemented
 
-	;Labels for Vendor informatrion and System Specs
+	;Labels for Vendor information and System Specs
 	GUICtrlCreateLabel("Vendor Information",300,30) ;Heading
 	GUICtrlCreateLabel("Brand:",300,52)
 	GUICtrlCreateLabel("Serial#:",300,76)
@@ -106,21 +129,21 @@ GUICtrlCreateTabItem("Repair")
 	local $btnRepPermissions = GUICtrlCreateButton("Repair Permissions",220,90,130) ; button to repair permissions on windows computers
 	local $btnFileAssociations = GUICtrlCreateButton("Fix File Associations",220,122,130) ; Runs various commands to repair file associations in the registry
 	local $btnSMARTData = GUICtrlCreateButton("Hard Drive Test",353,58,130) ; button to display SMART data for HDD troubleshooting
-GUICtrlCreateTabItem("Known Fixes") ; Nothing currently under this tab [to be implemented later]
+;GUICtrlCreateTabItem("Known Fixes") ; Nothing currently under this tab [to be implemented later]
 GUICtrlCreateTabItem("") ; A blank tab item indicates the end of the tab group
 
 ; Creates button row at bottom of window
 local $btnMAC = GUICtrlCreateButton("Manual MAC Address",5,200,120,30) ;Button to open cmd prompt, type ipconfig/all, and let you manually check network settings
 local $btnWorkgroup = GUICtrlCreateButton("Change Workgroup",130,200,110,30) ;Button to open advanced computer settings, clicks change so you can manually change workgroup settings
 local $btnAddRemovePrograms = GUICtrlCreateButton("Programs and Features",245,200,130,30) ;Opens Programs and Features to manually uninstall programs
-; There is plenty of room to add other functionality here, would be a good thing to find out what can be added for automation
 
 GUISetState(@SW_SHOW) ;Command to actually display the GUI
-
-; Up until this point we have seen the interface creation.  None of this previous code has any functions nor do they call the methods without this next part. 
+ 
 While 1
 	Switch GUIGetMsg()
 		Case $GUI_EVENT_CLOSE ;Closes window if program is given close signal
+			Exit ;This Exit command is what actually makes the program exit.
+		Case $mnuExitProgram
 			Exit ;This Exit command is what actually makes the program exit.
 		Case $btnWorkgroup ;if this button is clicked
 			OpenWorkgroup() ;Opens the advanced computer settings and clicks button to change workgroup
@@ -140,5 +163,24 @@ While 1
 			AddRemovePrograms() ;Opens Add/Remove programs or in vista/7, Programs and features.
 		Case $btnSMARTData ;if this button is clicked
 			Initialize_SMART() ;Opens a new window with SMART information for C: drive
+		;Case $mnuOpenTicket ;if this menu item is clicked
+			;OpenTicket() ;Loads ticket into window
+		;Case $mnuSaveTicket ;if this menu item is clicked
+			;SaveTicket() ;Saves current form into ticket file
+		Case $mnuPreferences ;if this menu item is clicked
+			CreatePreferencesWindow() ;Creates GUI to set defaults and window preferences
+		;Case $mnuRestart ;if this menu item is clicked
+			;SaveTicket() ;Saves current form into ticket file
+			;RestartPC() ;Restarts PC
+		;Case $mnuChecklist ;if this menu item is clicked
+			;CreateChecklistWindow() ;Creates GUI checklist for walk-in/drop-off procedure
+		;Case $mnuTechNotes ;if this menu item is clicked
+			;CreateTechNotesWindow() ; Move tech notes to external window
+		;Case $mnuTroubleshoot ;if this menu item is clicked
+			;CreateTroubleshootWindow() ;Creates GUI for network troubleshooting
+		Case $mnuAbout ;if this menu item is clicked
+			CreateAboutWindow($ProgramTitle,$Version,$ReleaseDate) ;Displays program information
+		Case $mnuHelp ;if this menu item is clicked
+			CreateHelpWindow($HelpFile) ;Displays information about how to use software
 	EndSwitch
 WEnd

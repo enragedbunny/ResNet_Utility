@@ -1,20 +1,22 @@
 ; Author: Johnny Keeton
 ; Other Contributors: Alex Burgy-Vanhoose, CJ Highley, Josh Back
 ; Contact: johnny.keeton@gmail.com [Please everyone add their contact email in this section]
-; Date Edited: 2012.10.29
+; Date Edited: 2012.11.2
 
 Func CreatePreferencesWindow()
 	#Include <GuiConstantsEx.au3>
+	local $ConfigPath = "Config.ini"
 
 	$PreferencesWindow = GUICreate("Preferences",300, 170)
 
 	GUICtrlCreateLabel("Default Tech",5,5)
 	GUICtrlCreateCombo("Select Name",85,3,140)
-	Local $DefaultTech = iniRead("Functions\config\Config.ini","Preferences","Default_Tech","Select Name")
+
+	Local $DefaultTech = iniRead($ConfigPath,"Preferences","Default_Tech","Select Name")
 	GUICtrlSetData(-1, "Johnny Keeton|Logan Wallen|Zack Smith|CJ Highley|Adam Weintraut|Alex Burgy-Vanhoose|Josh Back|Kia Wallen|Courtney Isaacs|Lisa Moore",$DefaultTech)
 	
 	GUICtrlCreateCheckbox("Autosave ticket when closing program?",5,30)
-	Local $AutoSave = IniRead("Functions\config\Config.ini","Preferences","AutoSave_On_Close","NotFound")
+	Local $AutoSave = IniRead($ConfigPath,"Preferences","AutoSave_On_Close","NotFound")
 	If Not($AutoSave = "NotFound") Then
 		If $AutoSave = 1 Then
 			GUICtrlSetState(-1,$GUI_CHECKED)
@@ -24,11 +26,11 @@ Func CreatePreferencesWindow()
 	EndIf
 
 	GUICtrlCreateLabel("What color do you want the text to be? (ex 0x0000FF)?",5,55)
-	Local $TextColor = IniRead("Functions\config\Config.ini","Preferences","Text_Color","NotFound")
+	Local $TextColor = IniRead($ConfigPath,"Preferences","Text_Color","NotFound")
 	GUICtrlCreateInput($TextColor,5,78,100)
 	
 	GUICtrlCreateCheckbox("Automatically load tickets found in temp dir?",5,101)
-	Local $AutoLoad = IniRead("Functions\config\Config.ini","Preferences","AutoLoad_Ticket","NotFound")
+	Local $AutoLoad = IniRead($ConfigPath,"Preferences","AutoLoad_Ticket","NotFound")
 	If Not($AutoLoad = "NotFound") Then
 		If $AutoLoad = 1 Then
 			GUICtrlSetState(-1,$GUI_CHECKED)

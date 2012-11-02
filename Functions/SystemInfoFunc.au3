@@ -2,7 +2,7 @@
 ; Author: Johnny Keeton
 ; Other Contributors: Alex Burgy-Vanhoose, CJ Highley, Josh Back
 ; Contact: johnny.keeton@gmail.com 
-; Date Edited: 2012.10.11
+; Date Edited: 2012.11.2
 ; Purpose: Provide WMI access to collect system information
 ; Compatability: Windows Vista/7 (probably XP, will work for Windows 8)
 

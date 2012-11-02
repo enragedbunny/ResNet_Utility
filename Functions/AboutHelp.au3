@@ -16,6 +16,6 @@ Func CreateAboutWindow($ProgramTitle,$Version,$ReleaseDate)
 	WEnd
 
 EndFunc
-Func CreateHelpWindow()
-	
+Func CreateHelpWindow($FileName)
+	Run("notepad.exe " & $Filename,"",@SW_MAXIMIZE)
 EndFunc

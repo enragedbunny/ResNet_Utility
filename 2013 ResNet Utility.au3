@@ -53,7 +53,7 @@ $mnuToolsMenu    = GUICtrlCreateMenu("&Tools") ;Tools menu
 $mnuPreferences  = GUICtrlCreateMenuItem("&Preferences",$mnuToolsMenu) ;Opens the preferences window
 ;$mnuRestart      = GUICtrlCreateMenuItem("Save and Restart",$mnuToolsMenu) ;Saves form and Restart PC
 
-$mnuHelpMenu     = GUICtrlCreateMenu("?") ;Help Menu
+$mnuHelpMenu     = GUICtrlCreateMenu("Help") ;Help Menu  //switched the "?" to "Help" testing git hub tracker and just getting started / ABV 
 $mnuAbout        = GUICtrlCreateMenuItem("About",$mnuHelpMenu) ;Opens about window showing version information
 $mnuHelp         = GUICtrlCreateMenuItem("Help",$mnuHelpMenu) ;Opens help file for assistance using the program
 

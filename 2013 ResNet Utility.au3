@@ -29,8 +29,13 @@ Global Const $SC_DRAGMOVE = 0xF012 ;Used for moving the GUI with no borders
 
 
 ; Creates GUI, sets name in title bar and icon.
+<<<<<<< HEAD
 local $rGUI = GUICreate("ResNet Utility " & $Version, 710, 255,((@DesktopWidth - 710)/2),((@DesktopHeight - 255)/2),$WS_POPUP) ;Created the GUI form and the size. Sets position to center of screen.
 GUISetIcon("ResNet.ico", 0) ;Sets the icon for the window title bar (Should be in the same directory as this file, with this name!)
+=======
+GUICreate("ResNet Utility " & $Version, 710, 555) ;Created the GUI form and the size
+GUISetIcon("resnet.ico", 0) ;Sets the icon for the window title bar (Should be in the same directory as this file, with this name!)
+>>>>>>> First GO!
 local $objWMI = ObjGet("winmgmts:\\localhost\root\CIMV2") ;Create connection to WMI
 
 ;The following rows parse data into arrays for easier use.
@@ -134,13 +139,30 @@ GUICtrlCreateTabItem("Repair")
 	local $btnFileAssociations = GUICtrlCreateButton("Fix File Associations",220,122,130) ; Runs various commands to repair file associations in the registry
 	;local $btnSMARTData = GUICtrlCreateButton("Hard Drive Test",353,58,130) ; button to display SMART data for HDD troubleshooting
 ;GUICtrlCreateTabItem("Known Fixes") ; Nothing currently under this tab [to be implemented later]
+
+GUICtrlCreateTabItem("Ticket") ; Creating Ticket Tab
+	;Display first column (LN, Hall, EKU Eail)
+	GUICtrlCreateLabel("Last Name:",12,50) ;12 is pixels from left, 50, & 
+	GUICtrlCreateLabel("Hall:",12,85) ;100,& ^ //these are all 35pixels apart in height
+	GUICtrlCreateLabel("EKU Email:",12,120) ;150 are the height^
+	
+	;Display second column (FN, Phone)
+	GUICtrlCreateLabel("First Name:",222,50) ;First Name
+	GUICtrlCreateLabel("Phone:",222,85) ; Phone Number
+	
+	;Display Third column (EKU ID, Phone; Other)
+	GUICtrlCreateLabel("EKU ID:",442,50) ;EKU ID
+	GUICtrlCreateLabel("Phone Other:",442,85) ; Phone Number
+
 GUICtrlCreateTabItem("") ; A blank tab item indicates the end of the tab group
 
 ; Creates button row at bottom of window
-local $btnMAC = GUICtrlCreateButton("Manual MAC Address",5,200,120,30) ;Button to open cmd prompt, type ipconfig/all, and let you manually check network settings
-local $btnWorkgroup = GUICtrlCreateButton("Change Workgroup",130,200,110,30) ;Button to open advanced computer settings, clicks change so you can manually change workgroup settings
-local $btnAddRemovePrograms = GUICtrlCreateButton("Programs and Features",245,200,130,30) ;Opens Programs and Features to manually uninstall programs
-
+local $btnMAC = GUICtrlCreateButton("Manual MAC Address",5,500,120,30) ;Button to open cmd prompt, type ipconfig/all, and let you manually check network settings
+local $btnWorkgroup = GUICtrlCreateButton("Change Workgroup",130,500,110,30) ;Button to open advanced computer settings, clicks change so you can manually change workgroup settings
+local $btnAddRemovePrograms = GUICtrlCreateButton("Programs and Features",245,500,130,30) ;Opens Programs and Features to manually uninstall programs
+local $btnSave = GUICtrlCreateButton("Save",515,500,50,30) ;Button to eventually save progress No action in While loop blow as well as no function in CMDFunc
+local $btnSave = GUICtrlCreateButton("Export",570,500,65,30) ;Button for Exporting No action or fucntion yet
+local $btnSave = GUICtrlCreateButton("Upload",640,500,65,30) ;Button for Uploading Ticket No action or function yet
 GUISetState(@SW_SHOW) ;Command to actually display the GUI
  
 While 1

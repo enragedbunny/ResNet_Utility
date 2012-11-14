@@ -161,8 +161,8 @@ local $btnMAC = GUICtrlCreateButton("Manual MAC Address",5,500,120,30) ;Button t
 local $btnWorkgroup = GUICtrlCreateButton("Change Workgroup",130,500,110,30) ;Button to open advanced computer settings, clicks change so you can manually change workgroup settings
 local $btnAddRemovePrograms = GUICtrlCreateButton("Programs and Features",245,500,130,30) ;Opens Programs and Features to manually uninstall programs
 local $btnSave = GUICtrlCreateButton("Save",515,500,50,30) ;Button to eventually save progress No action in While loop blow as well as no function in CMDFunc
-local $btnSave = GUICtrlCreateButton("Export",570,500,65,30) ;Button for Exporting No action or fucntion yet
-local $btnSave = GUICtrlCreateButton("Upload",640,500,65,30) ;Button for Uploading Ticket No action or function yet
+local $btnExport = GUICtrlCreateButton("Export",570,500,65,30) ;Button for Exporting No action or fucntion yet
+local $btnUpload = GUICtrlCreateButton("Upload",640,500,65,30) ;Button for Uploading Ticket No action or function yet
 GUISetState(@SW_SHOW) ;Command to actually display the GUI
  
 While 1

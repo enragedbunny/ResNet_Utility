@@ -10,6 +10,7 @@
 ;           3. When adding variables, it must start with $ symbol and use capital letters for the first letter of each word in the name
 ;              Examples:    $ThisIsAVariable $MACAddressVariable, etc
 
+#include <EditConstants.au3> ;For the Tech Notes Box
 #include <GuiConstantsEx.au3> ; This file is provided after installing Autoit, and provides the ability to use GUI environment.
 #include <WindowsConstants.au3> ; Import variables for tweaking UI. Used to remove borders on GUI and potentially other things.
 #include <SendMessage.au3> ;Import ability to send a window a command (Used to move GUI with no borders)
@@ -61,6 +62,10 @@ $mnuPreferences  = GUICtrlCreateMenuItem("&Preferences",$mnuToolsMenu) ;Opens th
 $mnuHelpMenu     = GUICtrlCreateMenu("Help") ;Help Menu  //switched the "?" to "Help" testing git hub tracker and just getting started / ABV 
 $mnuAbout        = GUICtrlCreateMenuItem("About",$mnuHelpMenu) ;Opens about window showing version information
 $mnuHelp         = GUICtrlCreateMenuItem("Help",$mnuHelpMenu) ;Opens help file for assistance using the program
+
+;Creating Tech Notes Area
+$Edit1 = GUICtrlCreateEdit("", 6, 210, 695, 275)
+GUICtrlSetData(-1, "Tech Notes")
 
 ; Creates Tabs
 GUICtrlCreateTab(5, 5, 700, 190) ; Creates tab group
@@ -167,6 +172,9 @@ GUISetState(@SW_SHOW) ;Command to actually display the GUI
  
 While 1
 	Switch GUIGetMsg()
+		Case $GUI_EVENT_CLOSE
+			Exit
+		;Case $Edit1	
 		Case $GUI_EVENT_CLOSE ;Closes window if program is given close signal
 			Exit ;This Exit command is what actually makes the program exit.
 		Case $mnuExitProgram

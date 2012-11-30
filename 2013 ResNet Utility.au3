@@ -31,7 +31,6 @@ Global Const $SC_DRAGMOVE = 0xF012 ;Used for moving the GUI with no borders
 ; Creates GUI, sets name in title bar and icon.
 local $rGUI = GUICreate("ResNet Utility " & $Version, 710, 255,((@DesktopWidth - 710)/2),((@DesktopHeight - 255)/2),$WS_POPUP) ;Created the GUI form and the size. Sets position to center of screen.
 GUISetIcon("ResNet.ico", 0) ;Sets the icon for the window title bar (Should be in the same directory as this file, with this name!)
-
 local $objWMI = ObjGet("winmgmts:\\localhost\root\CIMV2") ;Create connection to WMI
 
 ;The following rows parse data into arrays for easier use.

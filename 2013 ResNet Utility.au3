@@ -13,6 +13,8 @@
 #include <GuiConstantsEx.au3> ; This file is provided after installing Autoit, and provides the ability to use GUI environment.
 #include <WindowsConstants.au3> ; Import variables for tweaking UI. Used to remove borders on GUI and potentially other things.
 #include <SendMessage.au3> ;Import ability to send a window a command (Used to move GUI with no borders)
+#include <ComboConstants.au3> ;For Combo Boxes
+#include <GuiTab.au3> ;For tab colors
 #include <Functions\CMDFunc.au3> ;One of my files for common used funtions using command line
 ;#include <Functions\SMARTFunc.au3> ; A function for getting smart data, not my own code
 #include <Functions\SystemInfoFunc.au3> ;My function for getting system info
@@ -27,10 +29,10 @@ local $HelpFile = "README.txt"
 local $lblArray[12] ;Used to set color for data labels in a loop.
 Global Const $SC_DRAGMOVE = 0xF012 ;Used for moving the GUI with no borders
 
-
 ; Creates GUI, sets name in title bar and icon.
-local $rGUI = GUICreate("ResNet Utility " & $Version, 710, 255,((@DesktopWidth - 710)/2),((@DesktopHeight - 255)/2),$WS_POPUP) ;Created the GUI form and the size. Sets position to center of screen.
+local $rGUI = GUICreate("ResNet Utility " & $Version, 710, 555,((@DesktopWidth - 710)/2),((@DesktopHeight - 255)/2),$WS_POPUP) ;Created the GUI form and the size. Sets position to center of screen.
 GUISetIcon("ResNet.ico", 0) ;Sets the icon for the window title bar (Should be in the same directory as this file, with this name!)
+
 local $objWMI = ObjGet("winmgmts:\\localhost\root\CIMV2") ;Create connection to WMI
 
 ;The following rows parse data into arrays for easier use.
@@ -62,7 +64,7 @@ $Edit1 = GUICtrlCreateEdit("", 6, 210, 695, 275)
 GUICtrlSetData(-1, "Tech Notes")
 
 ; Creates Tabs
-GUICtrlCreateTab(5, 5, 700, 190) ; Creates tab group
+$hTab_1 = GUICtrlCreateTab(5, 5, 700, 190) ; Creates tab group
 GUICtrlCreateTabItem("Info") ;Creating the info tab
 	;Creates labels, to collect system information and present it.
 
@@ -139,20 +141,71 @@ GUICtrlCreateTabItem("Repair")
 	;local $btnSMARTData = GUICtrlCreateButton("Hard Drive Test",353,58,130) ; button to display SMART data for HDD troubleshooting
 ;GUICtrlCreateTabItem("Known Fixes") ; Nothing currently under this tab [to be implemented later]
 
-GUICtrlCreateTabItem("Ticket") ; Creating Ticket Tab
+$hTab_10 = GUICtrlCreateTabItem("Contact Info") ; Creating Contact Info Tab
+	_GUICtrlTab_SetBkColor($hGUI, $hTab_1, 0xFFCCCC) ;Making the background for 
 	;Display first column (LN, Hall, EKU Eail)
-	GUICtrlCreateLabel("Last Name:",12,50) ;12 is pixels from left, 50, & 
-	GUICtrlCreateLabel("Hall:",12,85) ;100,& ^ //these are all 35pixels apart in height
-	GUICtrlCreateLabel("EKU Email:",12,120) ;150 are the height^
+	GUICtrlCreateLabel("Last Name:",12,50) ;Last Name
+	GUICtrlCreateInput("", 85, 48, 130, 20) ;Last Name Input Box
+	GUICtrlCreateLabel("Hall:",12,85) ;Hall
+	GUICtrlCreateCombo("No Choice", 85, 83, 130, 20, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL)) ;Hall Combo Box
+	GUICtrlSetData(-1, "Burnam|Case|Clay|Combs|Commonwealth|Greek Towers|Keene|Martin|McGregor|Palmer|Sullivan|Telford|Walters|Brockton|Off Campus") ; add other item snd set a new default
+	GUICtrlCreateLabel("EKU Email:",12,120) 
+	GUICtrlCreateInput("", 85, 118, 130, 20) ;EMail Input Box
 	
 	;Display second column (FN, Phone)
 	GUICtrlCreateLabel("First Name:",222,50) ;First Name
+	GUICtrlCreateInput("", 295, 48, 130, 20) ;F N input box
 	GUICtrlCreateLabel("Phone:",222,85) ; Phone Number
+	GUICtrlCreateInput("", 295, 83, 130, 20) ;Phone input box
 	
 	;Display Third column (EKU ID, Phone; Other)
 	GUICtrlCreateLabel("EKU ID:",442,50) ;EKU ID
-	GUICtrlCreateLabel("Phone Other:",442,85) ; Phone Number
-
+	GUICtrlCreateInput("", 515, 48, 130, 20) ;EKU ID input box
+	GUICtrlCreateLabel("Phone Other:",442,85) ; Secondary Phone Number
+	GUICtrlCreateInput("", 515, 83, 130, 20) ;2nd Phone input box
+	
+GUICtrlCreateTabItem("Incident Notes") ; Creating Incident Notes Tab
+	;Display first column (LN, Hall, EKU Eail)
+	GUICtrlCreateLabel("Problem Type:",12,50) ;Problem Type
+	$Problem = GUICtrlCreateCombo("No Choice", 85, 48, 130, 20, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL)) ;Problem type Combo Box
+	GUICtrlSetData(-1, "Blackboard|Cart Checkout|Clusters|Complaint-Esc. to Lisa|Drive Recovery|Ekey|EKU Direct|Electronics Recycling|Email|Employment|Game Console|Hardware-NIC|Hardware-Other|IM|In-Room Pickup|Judicial Sanction|Labs-Combs 230|Marketing, PR|Network-Bypass|Network-Connection|Phone|Pickup In-Room|SkyDrive|Software-Antivirus|Software-Burned|Software-CCA|Software-OS Updates|Software-Other|Software-Virus/Malware|Voicemail|W: Drive|Wiring ")
+	GUICtrlCreateLabel("Platform:",12,85) ;Platform
+	$Platform = GUICtrlCreateCombo("No Choice", 85, 83, 130, 20, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL)) ;Platform Combo Box
+	GUICtrlSetState($Platform, $GUI_DISABLE) ; Disable the combo until a Symptom is chosen <<<<<<<<<<<<<<<<<<<<
+	GUICtrlCreateLabel("Symptom:",222,50) ;Symptom
+	$Symptom = GUICtrlCreateCombo("No Choice", 295, 48, 130, 20, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL)) ;Symptom Combo Box
+	GUICtrlSetState($Symptom, $GUI_DISABLE) ; Disable the combo until a Platform is chosen <<<<<<<<<<<<<<<<<<<<
+	GUICtrlCreateLabel("Root Cause:",222,85) ; Root Cause
+	$RootCause = GUICtrlCreateCombo("No Choice", 295, 83, 130, 20, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL)) ;Root Cause Combo Box
+	GUICtrlSetState($RootCause, $GUI_DISABLE) ; Disable the combo until a Platform is chosen <<<<<<<<<<<<<<<<<<<<
+	GUICtrlCreateCheckbox("Kevin's Cell (Wiring)",442,50) ;Kevins Cell check
+	
+GUICtrlCreateTabItem("Triage Notes") ; Creating Triage Notes Tab
+	;Display Top Row (Start Tech, & Start up issues)
+	GUICtrlCreateLabel("Start Tech: ",12,50) ;Start Tech
+	GUICtrlCreateInput("", 85, 48, 130, 20) ;x, y, width, height
+	GUICtrlCreateLabel("Startup issues: ",222,50) ;Startup issues 
+	GUICtrlCreateInput("", 295, 48, 390, 20) ;Startup issues input box
+	GUICtrlCreateLabel("Triage Notes: ",12,85) ;Triage Notes
+	GUICtrlCreateEdit("", 15, 100, 680, 85) ;Triage Notes Text Box
+	
+GUICtrlCreateTabItem("Closing Notes") ; Creating Triage Notes Tab
+	GUICtrlCreateLabel("Issues:",12,50) ;Issues
+	GUICtrlCreateCombo("No Choice", 85, 48, 130, 20, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL)) ;Combo Box First Try ABV
+	GUICtrlCreateLabel("Success or",12,85) ;Success or Defect
+	GUICtrlCreateLabel("Defect?",12,100)
+	GUICtrlCreateCombo("No Choice", 85, 83, 130, 20, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL)) ;Platform Combo Box
+	
+	GUICtrlCreateLabel("Other Issues?",222,50) ;Other Issues
+	GUICtrlCreateInput("", 295, 48, 130, 20) ;Other Issues Input Box
+	GUICtrlCreateLabel("Defect Why?",222,85) ;Defect Box 
+	GUICtrlCreateInput("", 295, 83, 130, 20) ;Defect input box
+	
+	GUICtrlCreateLabel("Traige End Tech:",442,50) ;Triage End Tech
+	GUICtrlCreateCombo("Default to Prefs", 530, 48, 130, 20, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL)) ;Triage end tech Combo Box
+	GUICtrlCreateLabel("Closing Tech:",442,85) ; Closing Tech
+	GUICtrlCreateCombo("Lead Tech (drop off)", 530, 83, 130, 20, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL)) ;Closing tech Combo Box
+	
 GUICtrlCreateTabItem("") ; A blank tab item indicates the end of the tab group
 
 ; Creates button row at bottom of window
@@ -164,7 +217,7 @@ local $btnExport = GUICtrlCreateButton("Export",570,500,65,30) ;Button for Expor
 local $btnUpload = GUICtrlCreateButton("Upload",640,500,65,30) ;Button for Uploading Ticket No action or function yet
 
 GUISetState(@SW_SHOW) ;Command to actually display the GUI
- 
+ ;Testing something
 While 1
 	Switch GUIGetMsg()
 		Case $GUI_EVENT_CLOSE
@@ -213,5 +266,21 @@ While 1
 			CreateAboutWindow($ProgramTitle,$Version,$ReleaseDate) ;Displays program information
 		Case $mnuHelp ;if this menu item is clicked
 			CreateHelpWindow($HelpFile) ;Displays information about how to use software
+		Case $Problem
+            GUICtrlSetState($Symptom, $GUI_ENABLE) ; Enable the Symptom combo box<<<<<<<<<<<<<<<<<<
+		Case $Symptom
+            GUICtrlSetState($Platform, $GUI_ENABLE) ; Enable the Platform combo box<<<<<<<<<<<<<<<<<<
+		Case $Platform
+            GUICtrlSetState($RootCause, $GUI_ENABLE) ; Enable the Platform combo box<<<<<<<<<<<<<<<<<<
 	EndSwitch
 WEnd
+;trying to change the TAB background colors
+Func _GUICtrlTab_SetBkColor($hWnd, $hSysTab32, $sBkColor)
+
+    Local $aTabPos = ControlGetPos($hWnd, "", $hSysTab32)
+    Local $aTab_Rect = _GUICtrlTab_GetItemRect($hSysTab32, -1)
+
+    GUICtrlCreateLabel("", $aTabPos[0]+2, $aTabPos[1]+$aTab_Rect[3]+4, $aTabPos[2]-6, $aTabPos[3]-$aTab_Rect[3]-7)
+    GUICtrlSetBkColor(-1, $sBkColor)
+    GUICtrlSetState(-1, $GUI_DISABLE)
+EndFunc

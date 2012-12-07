@@ -142,7 +142,7 @@ GUICtrlCreateTabItem("Repair")
 ;GUICtrlCreateTabItem("Known Fixes") ; Nothing currently under this tab [to be implemented later]
 
 $hTab_10 = GUICtrlCreateTabItem("Contact Info") ; Creating Contact Info Tab
-	_GUICtrlTab_SetBkColor($hGUI, $hTab_1, 0xFFCCCC) ;Making the background for 
+	_GUICtrlTab_SetBkColor($hGUI, $hTab_1, 0xFF3333) ;Changeing the background Color
 	;Display first column (LN, Hall, EKU Eail)
 	GUICtrlCreateLabel("Last Name:",12,50) ;Last Name
 	GUICtrlCreateInput("", 85, 48, 130, 20) ;Last Name Input Box
@@ -164,7 +164,8 @@ $hTab_10 = GUICtrlCreateTabItem("Contact Info") ; Creating Contact Info Tab
 	GUICtrlCreateLabel("Phone Other:",442,85) ; Secondary Phone Number
 	GUICtrlCreateInput("", 515, 83, 130, 20) ;2nd Phone input box
 	
-GUICtrlCreateTabItem("Incident Notes") ; Creating Incident Notes Tab
+$hTab_11 = GUICtrlCreateTabItem("Incident Notes") ; Creating Incident Notes Tab
+	_GUICtrlTab_SetBkColor($hGUI, $hTab_1, 0x33CC33) ;Changeing the background Color
 	;Display first column (LN, Hall, EKU Eail)
 	GUICtrlCreateLabel("Problem Type:",12,50) ;Problem Type
 	$Problem = GUICtrlCreateCombo("No Choice", 85, 48, 130, 20, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL)) ;Problem type Combo Box
@@ -180,7 +181,8 @@ GUICtrlCreateTabItem("Incident Notes") ; Creating Incident Notes Tab
 	GUICtrlSetState($RootCause, $GUI_DISABLE) ; Disable the combo until a Platform is chosen <<<<<<<<<<<<<<<<<<<<
 	GUICtrlCreateCheckbox("Kevin's Cell (Wiring)",442,50) ;Kevins Cell check
 	
-GUICtrlCreateTabItem("Triage Notes") ; Creating Triage Notes Tab
+$hTab_12 = GUICtrlCreateTabItem("Triage Notes") ; Creating Triage Notes Tab 
+	_GUICtrlTab_SetBkColor($hGUI, $hTab_1, 0xFFCC33) ;Changeing the background Color
 	;Display Top Row (Start Tech, & Start up issues)
 	GUICtrlCreateLabel("Start Tech: ",12,50) ;Start Tech
 	GUICtrlCreateInput("", 85, 48, 130, 20) ;x, y, width, height
@@ -189,12 +191,15 @@ GUICtrlCreateTabItem("Triage Notes") ; Creating Triage Notes Tab
 	GUICtrlCreateLabel("Triage Notes: ",12,85) ;Triage Notes
 	GUICtrlCreateEdit("", 15, 100, 680, 85) ;Triage Notes Text Box
 	
-GUICtrlCreateTabItem("Closing Notes") ; Creating Triage Notes Tab
+$hTab_12 = GUICtrlCreateTabItem("Closing Notes") ; Creating Triage Notes Tab
+	_GUICtrlTab_SetBkColor($hGUI, $hTab_1, 0x0066FF) ;Changeing the background Color
 	GUICtrlCreateLabel("Issues:",12,50) ;Issues
 	GUICtrlCreateCombo("No Choice", 85, 48, 130, 20, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL)) ;Combo Box First Try ABV
+	GUICtrlSetData(-1, "Drivers|Judicial Cleanup|Malware|MS Update|NAC Issues|New Connect|Other|Reconnect|Virus|Wireless")
 	GUICtrlCreateLabel("Success or",12,85) ;Success or Defect
 	GUICtrlCreateLabel("Defect?",12,100)
 	GUICtrlCreateCombo("No Choice", 85, 83, 130, 20, BitOR($CBS_DROPDOWN,$CBS_AUTOHSCROLL)) ;Platform Combo Box
+	GUICtrlSetData(-1, "Success|Defect")
 	
 	GUICtrlCreateLabel("Other Issues?",222,50) ;Other Issues
 	GUICtrlCreateInput("", 295, 48, 130, 20) ;Other Issues Input Box

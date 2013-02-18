@@ -15,8 +15,6 @@
 #include <SendMessage.au3> ;Import ability to send a window a command (Used to move GUI with no borders)
 #include <ComboConstants.au3> ;For Combo Boxes
 #include <GuiTab.au3> ;For tab colors
-#include <WindowsConstants.au3> ; Import variables for tweaking UI. Used to remove borders on GUI and potentially other things.
-#include <SendMessage.au3> ;Import ability to send a window a command (Used to move GUI with no borders)
 #include <Functions\CMDFunc.au3> ;One of my files for common used funtions using command line
 ;#include <Functions\SMARTFunc.au3> ; A function for getting smart data, not my own code
 #include <Functions\SystemInfoFunc.au3> ;My function for getting system info

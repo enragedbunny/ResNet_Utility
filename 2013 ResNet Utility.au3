@@ -11,8 +11,10 @@
 ;              Examples:    $ThisIsAVariable $MACAddressVariable, etc
 
 #include <GuiConstantsEx.au3> ; This file is provided after installing Autoit, and provides the ability to use GUI environment.
+#include <WindowsConstants.au3> ; Import variables for tweaking UI. Used to remove borders on GUI and potentially other things.
+#include <SendMessage.au3> ;Import ability to send a window a command (Used to move GUI with no borders)
 #include <Functions\CMDFunc.au3> ;One of my files for common used funtions using command line
-#include <Functions\SMARTFunc.au3> ; A function for getting smart data, not my own code
+;#include <Functions\SMARTFunc.au3> ; A function for getting smart data, not my own code
 #include <Functions\SystemInfoFunc.au3> ;My function for getting system info
 #include <Functions\PreferencesWindow.au3> ;My Function for displaying the preferences window
 #include <Functions\AboutHelp.au3> ;My function for displaying about and help windows.
@@ -23,10 +25,12 @@ local $Version = "0.3.1" ; Current version of the software
 local $ReleaseDate = "2012.11.2"
 local $HelpFile = "README.txt"
 local $lblArray[12] ;Used to set color for data labels in a loop.
+Global Const $SC_DRAGMOVE = 0xF012 ;Used for moving the GUI with no borders
+
 
 ; Creates GUI, sets name in title bar and icon.
-GUICreate("ResNet Utility " & $Version, 710, 255) ;Created the GUI form and the size
-GUISetIcon("resnet.ico", 0) ;Sets the icon for the window title bar (Should be in the same directory as this file, with this name!)
+local $rGUI = GUICreate("ResNet Utility " & $Version, 710, 255,((@DesktopWidth - 710)/2),((@DesktopHeight - 255)/2),$WS_POPUP) ;Created the GUI form and the size. Sets position to center of screen.
+GUISetIcon("ResNet.ico", 0) ;Sets the icon for the window title bar (Should be in the same directory as this file, with this name!)
 local $objWMI = ObjGet("winmgmts:\\localhost\root\CIMV2") ;Create connection to WMI
 
 ;The following rows parse data into arrays for easier use.
@@ -107,7 +111,7 @@ GUICtrlCreateTabItem("Info") ;Creating the info tab
 	;Group for alerts
 	GUICtrlCreateGroup("Alerts",418,107,280,70)  ;Creates an alert box to display information alerts
 		GUICtrlSetBkColor(-1, 0xFF0000) ;Makes the border red
-		GUICtrlCreateLabel("",424,130,100,12) ;Shows up only if workgroup is not ResNet
+		GUICtrlCreateLabel("",424,130,100,12) ;Shows up only if workgroup is not ResNet; Not working, need to call function and parse results
 		GUICtrlSetColor(-1,0xFF0000) ;sets the color of the workgroup alert to red
 		;$IPAd = GUICtrlCreateLabel("",424,124,100,12) ;Will warn if IP address does not match filter [To be implemented later]
 		;GUICtrlSetColor(-1,0xFF0000) ; Uncomment this when IPaddress filtering works
@@ -128,7 +132,7 @@ GUICtrlCreateTabItem("Repair")
 	local $btnRepWinUpdate = GUICtrlCreateButton("Repair Windows Update",220,58,130) ; button to run a variety of commands to repair windows update
 	local $btnRepPermissions = GUICtrlCreateButton("Repair Permissions",220,90,130) ; button to repair permissions on windows computers
 	local $btnFileAssociations = GUICtrlCreateButton("Fix File Associations",220,122,130) ; Runs various commands to repair file associations in the registry
-	local $btnSMARTData = GUICtrlCreateButton("Hard Drive Test",353,58,130) ; button to display SMART data for HDD troubleshooting
+	;local $btnSMARTData = GUICtrlCreateButton("Hard Drive Test",353,58,130) ; button to display SMART data for HDD troubleshooting
 ;GUICtrlCreateTabItem("Known Fixes") ; Nothing currently under this tab [to be implemented later]
 GUICtrlCreateTabItem("") ; A blank tab item indicates the end of the tab group
 
@@ -145,6 +149,8 @@ While 1
 			Exit ;This Exit command is what actually makes the program exit.
 		Case $mnuExitProgram
 			Exit ;This Exit command is what actually makes the program exit.
+		Case $GUI_EVENT_PRIMARYDOWN
+			_SendMessage($rGUI, $WM_SYSCOMMAND, $SC_DRAGMOVE, 0)
 		Case $btnWorkgroup ;if this button is clicked
 			OpenWorkgroup() ;Opens the advanced computer settings and clicks button to change workgroup
 		Case $btnMAC ;if this button is clicked
@@ -161,8 +167,8 @@ While 1
 			FixFileAssociations() ;Runs some commands to fix file associations (.exe, .lnk, etc)
 		Case $btnAddRemovePrograms ;if this button is clicked
 			AddRemovePrograms() ;Opens Add/Remove programs or in vista/7, Programs and features.
-		Case $btnSMARTData ;if this button is clicked
-			Initialize_SMART() ;Opens a new window with SMART information for C: drive
+		;Case $btnSMARTData ;if this button is clicked
+			;Initialize_SMART() ;Opens a new window with SMART information for C: drive
 		;Case $mnuOpenTicket ;if this menu item is clicked
 			;OpenTicket() ;Loads ticket into window
 		;Case $mnuSaveTicket ;if this menu item is clicked

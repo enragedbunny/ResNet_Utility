@@ -18,7 +18,7 @@ EndFunc
 
 Func _GetSmartData($vDrive  = "C:") ;optional Parameter $vDrive is = C: by default
 
-	If DriveStatus ( $vDrive ) = "INVALID" then ;Checks to see if SMART can be determined for the drive
+	If DriveStatus($vDrive) = "INVALID" then ;Checks to see if SMART can be determined for the drive
 		Return -1 ; Exits the function and sets the status as "-1" to indicate some error occurred
 	EndIf
 

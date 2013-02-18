@@ -2,7 +2,7 @@
 Program: ResNet Utility
 Created by: Johnny Keeton
 Other Contributors: Joseph Vanhoose, Josh Back, CJ Highley
-Last Edited: 2012-10-07
+Last Edited: 2013-2-18
 Written in: Autoit
 Compatability: Windows Vista/7
 ***********************************************************************
@@ -60,3 +60,10 @@ Version 0.3.0 (2012.10.4)
 * Commented code for readability
 * Changed Version to 0.3.0
 * Separated functions from main program
+
+Version 0.3.1 (2012.11.2)
+
+* Works with Windows 8
+* Disabled some previous features while they are optimized
+* Some Work-in-Progress features are disabled
+* There is now a menu, though much of its functionality is missing 

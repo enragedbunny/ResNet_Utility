@@ -7,7 +7,7 @@ and understandable by anybody who wishes to edit it. They are presented in no or
 
 GUIDELINES:
   * Comment, Comment, Comment. This helps me and others understand what you are trying
-    to accomplish. The ';" symbol indicates comments after the symbol on any line.
+    to accomplish. The ';" symbol makes any text after it on the same line a comment.
 
   * Variables in Autoit begin with the '$' symbol, additionally I prefer to add a 
     prefix to applicable variables to indicate what they refer to. For example, buttons

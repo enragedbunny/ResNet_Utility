@@ -3,7 +3,7 @@
 ; Author: Johnny Keeton
 ; Other Contributors: Alex Burgy-Vanhoose, CJ Highley, Josh Back
 ; Contact: johnny.keeton@gmail.com
-; Date Edited: 2012.11.2
+; Date Edited: 2013.02.18
 ; Notes:	1. When placing items, the order is (px from left, px from top, length, height), all sections of this not required
 ;			2. This program uses external functions, namely CMDFunc.au3, SMARTFunc.au3, SystemInfoFunc.au3 (these are the other files under the
 ;              "Functions" folder and they must keep the same file name and directory or the program will break (it relies on these files)
@@ -15,11 +15,12 @@
 #include <SendMessage.au3> ;Import ability to send a window a command (Used to move GUI with no borders)
 #include <ComboConstants.au3> ;For Combo Boxes
 #include <GuiTab.au3> ;For tab colors
-#include <Functions\CMDFunc.au3> ;One of my files for common used funtions using command line
-;#include <Functions\SMARTFunc.au3> ; A function for getting smart data, not my own code
-#include <Functions\SystemInfoFunc.au3> ;My function for getting system info
-#include <Functions\PreferencesWindow.au3> ;My Function for displaying the preferences window
-#include <Functions\AboutHelp.au3> ;My function for displaying about and help windows.
+#include <Functions\CMDFunc.au3> ;Performs several functions from command line.
+;#include <Functions\SMARTFunc.au3> ; Gets smart data
+#include <Functions\SystemInfoFunc.au3> ;Gets system info
+#include <Functions\PreferencesWindow.au3> ;Displays the preferences window
+#include <Functions\AboutHelp.au3> ;Displays about and help windows.
+#include <Functions\Tab_BK_Color.au3> ;Helps change the background color for tabs
 #RequireAdmin ;runs this program as admin, and anything it calls, has admin as well, needed for command prompt scripts
 
 local $ProgramTitle = "ResNet Utility"
@@ -222,7 +223,7 @@ local $btnExport = GUICtrlCreateButton("Export",570,500,65,30) ;Button for Expor
 local $btnUpload = GUICtrlCreateButton("Upload",640,500,65,30) ;Button for Uploading Ticket No action or function yet
 
 GUISetState(@SW_SHOW) ;Command to actually display the GUI
- ;Testing something
+
 While 1
 	Switch GUIGetMsg()
 		Case $GUI_EVENT_CLOSE
@@ -279,13 +280,3 @@ While 1
             GUICtrlSetState($RootCause, $GUI_ENABLE) ; Enable the Platform combo box<<<<<<<<<<<<<<<<<<
 	EndSwitch
 WEnd
-;trying to change the TAB background colors
-Func _GUICtrlTab_SetBkColor($hWnd, $hSysTab32, $sBkColor)
-
-    Local $aTabPos = ControlGetPos($hWnd, "", $hSysTab32)
-    Local $aTab_Rect = _GUICtrlTab_GetItemRect($hSysTab32, -1)
-
-    GUICtrlCreateLabel("", $aTabPos[0]+2, $aTabPos[1]+$aTab_Rect[3]+4, $aTabPos[2]-6, $aTabPos[3]-$aTab_Rect[3]-7)
-    GUICtrlSetBkColor(-1, $sBkColor)
-    GUICtrlSetState(-1, $GUI_DISABLE)
-EndFunc

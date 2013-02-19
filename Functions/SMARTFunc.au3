@@ -2,7 +2,7 @@
 ; Author: Johnny Keeton
 ; Other Contributors: Alex Burgy-Vanhoose
 ; Contact: johnny.keeton@gmail.com 
-; Date Edited: 2012.10.07
+; Date Edited: 2013.02.18
 ; NOTE: I (JK) modified this code from another source from the internet. If the owner recognizes this code and does not wish it to be
 ;       part of this project, please let me know and I will promptly remove it. 
 

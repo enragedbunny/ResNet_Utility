@@ -2,7 +2,7 @@
 ; Author: Johnny Keeton
 ; Other Contributors: Alex Burgy-Vanhoose
 ; Contact: johnny.keeton@gmail.com
-; Date Edited: 2012.11.2
+; Date Edited: 2013.02.18
 ; This file contains many functions for doing various things from command line
 
 Func AltGetMAC() ; Opens cmd.exe and executes ipconfig /all to manually check IP and MAC Addresses

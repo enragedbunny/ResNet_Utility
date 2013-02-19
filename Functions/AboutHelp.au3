@@ -1,3 +1,9 @@
+; Program: About Help manager
+; Author: Johnny Keeton
+; Other Contributors: Alex Burgy-Vanhoose
+; Contact: johnny.keeton@gmail.com 
+; Date Edited: 2012.11.2
+
 Func CreateAboutWindow($ProgramTitle,$Version,$ReleaseDate)
 	#Include <GuiConstantsEx.au3>
 

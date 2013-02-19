@@ -2,7 +2,7 @@
 ; Version: 0.3.1
 ; Author: Johnny Keeton
 ; Other Contributors: Alex Burgy-Vanhoose, CJ Highley, Josh Back
-; Contact: johnny.keeton@gmail.com [Please everyone add their contact email in this section]
+; Contact: johnny.keeton@gmail.com
 ; Date Edited: 2012.11.2
 ; Notes:	1. When placing items, the order is (px from left, px from top, length, height), all sections of this not required
 ;			2. This program uses external functions, namely CMDFunc.au3, SMARTFunc.au3, SystemInfoFunc.au3 (these are the other files under the

@@ -1,7 +1,7 @@
 ; Program: SMART Functions
 ; Author: Johnny Keeton
-; Other Contributors: Alex Burgy-Vanhoose, CJ Highley, Josh Back
-; Contact: johnny.keeton@gmail.com [Please everyone add their contact email in this section]
+; Other Contributors: Alex Burgy-Vanhoose
+; Contact: johnny.keeton@gmail.com 
 ; Date Edited: 2012.10.07
 ; NOTE: I (JK) modified this code from another source from the internet. If the owner recognizes this code and does not wish it to be
 ;       part of this project, please let me know and I will promptly remove it. 

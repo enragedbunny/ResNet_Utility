@@ -1,10 +1,10 @@
 ; File: SystemInfoFunc.au3
 ; Author: Johnny Keeton
-; Other Contributors: Alex Burgy-Vanhoose, CJ Highley, Josh Back
+; Other Contributors: Alex Burgy-Vanhoose
 ; Contact: johnny.keeton@gmail.com 
 ; Date Edited: 2012.11.2
 ; Purpose: Provide WMI access to collect system information
-; Compatability: Windows Vista/7 (probably XP, will work for Windows 8)
+; Compatability: Windows Vista/7/8 (probably XP)
 
 Func GET_Device_Manager_Errors($objWMI) ;retrieve device manager errors (Coded, NOT tested) will not return errors, but instead tell you if there are any
 	$objItems = $objWMI.ExecQuery("SELECT * FROM Win32_PnPEntity WHERE ConfigManagerErrorCode <> 0", "WQL", 0x10 + 0x20) ;query WMI to retrieve Win32_PnPEntity

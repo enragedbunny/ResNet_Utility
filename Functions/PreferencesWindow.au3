@@ -1,6 +1,7 @@
+; Program: Preferences Window
 ; Author: Johnny Keeton
-; Other Contributors: Alex Burgy-Vanhoose, CJ Highley, Josh Back
-; Contact: johnny.keeton@gmail.com [Please everyone add their contact email in this section]
+; Other Contributors: Alex Burgy-Vanhoose
+; Contact: johnny.keeton@gmail.com 
 ; Date Edited: 2012.11.2
 
 Func CreatePreferencesWindow()

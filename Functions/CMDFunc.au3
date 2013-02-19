@@ -1,4 +1,9 @@
-;This file contains many functions for doing various things from command line
+; Program: CMDFunc
+; Author: Johnny Keeton
+; Other Contributors: Alex Burgy-Vanhoose
+; Contact: johnny.keeton@gmail.com
+; Date Edited: 2012.11.2
+; This file contains many functions for doing various things from command line
 
 Func AltGetMAC() ; Opens cmd.exe and executes ipconfig /all to manually check IP and MAC Addresses
 	RunWait('"' & @ComSpec & '" /k ' & 'ipconfig /all', @SystemDir,@SW_SHOW) ; RunWait starts the indicated program and waits until it loads before executing other code.

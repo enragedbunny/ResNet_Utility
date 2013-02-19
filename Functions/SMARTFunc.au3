@@ -6,6 +6,8 @@
 ; NOTE: I (JK) modified this code from another source from the internet. If the owner recognizes this code and does not wish it to be
 ;       part of this project, please let me know and I will promptly remove it. 
 
+#include <array.au3> ; for array manipulation
+
 Func Initialize_SMART() ; This function calls other functions and serves to parse results from errors
 	Local $drive = "C:" ;Drive to get SMART for
 	Local $smartData = _GetSmartData($drive) ;This runs function _GetSmartData with the $drive as the drive to check
@@ -25,9 +27,9 @@ Func _GetSmartData($vDrive  = "C:") ;optional Parameter $vDrive is = C: by defau
 	If StringLeft($vDrive,1) <> '"' then $vDrive = '"' & $vDrive ;Checks (and ensures) to see if the drive begins with a quotation
 	If StringRight($vDrive,1) <> '"' then $vDrive &= '"' ;Checks (and ensures) to see if the drive ends with a quotation
 
-	Local $iCnt, $iCheck, $vPartition,$vDeviceID,$vPNPID ; Declares local variables needed.
+	Local $iCnt, $iCheck, $vPartition, $vDeviceID, $vPNPID ; Declares local variables needed.
 
-	$vPartition = _LogicalToPartition ($vDrive) ; Finds Partition ID from Logical drive ID (C:)
+	$vPartition = _LogicalToPartition($vDrive) ; Finds Partition ID from Logical drive ID (C:)
 	If $vPartition = -1 then Return -1 ; If there was an error, stops function and returns error -1
 
 	$vDeviceID = _PartitionToPhysicalDriveID($vPartition) ; Finds Drive ID from Partition ID
@@ -186,6 +188,7 @@ Func _PartitionToPhysicalDriveID($vPart)
 			Endif
 		Next
 	Endif
+	Return $strDeviceID
 	Return -1 ; Returns error if it was unable to collect information
 EndFunc
 
@@ -200,6 +203,13 @@ Func _PNPIDFromPhysicalDriveID($vDriveID)
                                           $wbemFlagReturnImmediately + $wbemFlagForwardOnly)
 	If IsObj($colItems) then
 		For $objItem In $colItems
+			
+
+			;The following line is used to bypass the if statement. This was done to temporarily fix an error [TODO] Fix the problem
+			Return $objItem.PNPDeviceID
+			
+
+
 			If $objItem.DeviceID == $vDriveID then
 				Return $objItem.PNPDeviceID ; Plug N Play ID
 			EndIf

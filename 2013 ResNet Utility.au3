@@ -16,7 +16,7 @@
 #include <ComboConstants.au3> ;For Combo Boxes
 #include <GuiTab.au3> ;For tab colors
 #include <Functions\CMDFunc.au3> ;Performs several functions from command line.
-;#include <Functions\SMARTFunc.au3> ; Gets smart data
+#include <Functions\SMARTFunc.au3> ; Gets smart data
 #include <Functions\SystemInfoFunc.au3> ;Gets system info
 #include <Functions\PreferencesWindow.au3> ;Displays the preferences window
 #include <Functions\AboutHelp.au3> ;Displays about and help windows.
@@ -139,7 +139,7 @@ GUICtrlCreateTabItem("Repair")
 	local $btnRepWinUpdate = GUICtrlCreateButton("Repair Windows Update",220,58,130) ; button to run a variety of commands to repair windows update
 	local $btnRepPermissions = GUICtrlCreateButton("Repair Permissions",220,90,130) ; button to repair permissions on windows computers
 	local $btnFileAssociations = GUICtrlCreateButton("Fix File Associations",220,122,130) ; Runs various commands to repair file associations in the registry
-	;local $btnSMARTData = GUICtrlCreateButton("Hard Drive Test",353,58,130) ; button to display SMART data for HDD troubleshooting
+	local $btnSMARTData = GUICtrlCreateButton("Hard Drive Test",353,58,130) ; button to display SMART data for HDD troubleshooting
 ;GUICtrlCreateTabItem("Known Fixes") ; Nothing currently under this tab [to be implemented later]
 
 $hTab_10 = GUICtrlCreateTabItem("Contact Info") ; Creating Contact Info Tab
@@ -228,7 +228,6 @@ While 1
 	Switch GUIGetMsg()
 		Case $GUI_EVENT_CLOSE
 			Exit
-		;Case $Edit1	
 		Case $GUI_EVENT_CLOSE ;Closes window if program is given close signal
 			Exit ;This Exit command is what actually makes the program exit.
 		Case $mnuExitProgram
@@ -251,8 +250,8 @@ While 1
 			FixFileAssociations() ;Runs some commands to fix file associations (.exe, .lnk, etc)
 		Case $btnAddRemovePrograms ;if this button is clicked
 			AddRemovePrograms() ;Opens Add/Remove programs or in vista/7, Programs and features.
-		;Case $btnSMARTData ;if this button is clicked
-			;Initialize_SMART() ;Opens a new window with SMART information for C: drive
+		Case $btnSMARTData ;if this button is clicked
+			Initialize_SMART() ;Opens a new window with SMART information for C: drive
 		;Case $mnuOpenTicket ;if this menu item is clicked
 			;OpenTicket() ;Loads ticket into window
 		;Case $mnuSaveTicket ;if this menu item is clicked

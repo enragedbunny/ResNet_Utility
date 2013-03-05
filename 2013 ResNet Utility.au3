@@ -37,7 +37,6 @@ GUISetIcon("ResNet.ico", 0) ;Sets the icon for the window title bar (Should be i
 local $objWMI = ObjGet("winmgmts:\\localhost\root\CIMV2") ;Create connection to WMI
 
 ;The following rows parse data into arrays for easier use.
-local $OSInformation = stringsplit(GET_OS_and_Service_Pack($objWMI),"|") ;Values are as follows (Operating System, Service Pack)
 local $BrandModel = stringsplit(GET_Manufacturer_and_Model($objWMI),"|") ;Values are as follows (Computer Manufacturer, Model Number)
 local $NetworkSettings = stringSplit(GET_Ethernet_and_Wireless($objWMI),"|") ;The values as follows (Wifi Description, Wifi MAC Address, Wired Description, Wired MAC Address)
 
@@ -76,9 +75,9 @@ GUICtrlCreateTabItem("Info") ;Creating the info tab
 	GUICtrlCreateLabel("Service Pack:",12,100) ;100 are the height^
 
 	;Creates labels to contain data
-	$lblArray[0] = GUICtrlCreateLabel($OSInformation[1],83,52) ;OS Edition (Windows 8, Windows 7, Windows Vista)
-	$lblArray[1] = GUICtrlCreateLabel(GET_System_Architecture($objWMI),83,76) ;32 or 64-bit
-	$lblArray[2] = GUICtrlCreateLabel($OSInformation[2],83,100) ;Service pack version installed
+	$lblArray[0] = GUICtrlCreateLabel(@OSVersion,83,52) ;OS Edition (Windows 8, Windows 7, Windows Vista)
+	$lblArray[1] = GUICtrlCreateLabel(@OSArch,83,76) ;32 or 64-bit
+	$lblArray[2] = GUICtrlCreateLabel(@OSServicePack,83,100) ;Service pack version installed
 
 	;Labels for network configuration
 	GUICtrlCreateLabel("Network Hardware",165,30) ;Heading

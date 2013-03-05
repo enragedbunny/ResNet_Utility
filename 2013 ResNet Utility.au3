@@ -30,7 +30,7 @@ local $lblArray[12] ;Used to set color for data labels in a loop.
 Global Const $SC_DRAGMOVE = 0xF012 ;Used for moving the GUI with no borders
 
 ; Creates GUI, sets name in title bar and icon.
-local $hGUI = GUICreate("ResNet Utility " & $Version, 710, 255,((@DesktopWidth - 800)/2),((@DesktopHeight - 255)/2),$WS_POPUP) ;Created the GUI form and the size. Sets position to center of screen.
+local $hGUI = GUICreate("ResNet Utility " & $Version, 710, 235,((@DesktopWidth - 710)/2),((@DesktopHeight - 235)/2),$WS_POPUP) ;Created the GUI form and the size. Sets position to center of screen.
 GUISetIcon("ResNet.ico", 0) ;Sets the icon for the window title bar (Should be in the same directory as this file, with this name!)
 
 local $objWMI = ObjGet("winmgmts:\\localhost\root\CIMV2") ;Create connection to WMI
@@ -40,20 +40,19 @@ local $BrandModel = stringsplit(GET_Manufacturer_and_Model($objWMI),"|") ;Values
 local $NetworkSettings = stringSplit(GET_Ethernet_and_Wireless($objWMI),"|") ;The values as follows (Wifi Description, Wifi MAC Address, Wired Description, Wired MAC Address)
 
 ; Creates Menu Bar, commented out until more is complete
-$mnuFileMenu     = GUICtrlCreateMenu("&File") ;File menu
-$mnuExitProgram  = GUICtrlCreateMenuItem("E&xit",$mnuFileMenu) ;Exit the software (Will not autosave ticket unless pref is set to do so (default to save))
+;$mnuFileMenu     = GUICtrlCreateMenu("&File") ;File menu
 
-$mnuViewMenu     = GUICtrlCreateMenu("&View") ;View menu
+;$mnuViewMenu     = GUICtrlCreateMenu("&View") ;View menu
 ;$mnuChecklist    = GUICtrlCreateMenuItem("Checklist Pane",$mnuViewMenu) ;Opens checklist pane
 ;$mnuTroubleshoot = GUICtrlCreateMenuItem("Troubleshooting Pane",$mnuViewMenu) ;Opens troubleshooting pane
 
-$mnuToolsMenu    = GUICtrlCreateMenu("&Tools") ;Tools menu
-$mnuPreferences  = GUICtrlCreateMenuItem("&Preferences",$mnuToolsMenu) ;Opens the preferences window
+;$mnuToolsMenu    = GUICtrlCreateMenu("&Tools") ;Tools menu
+;$mnuPreferences  = GUICtrlCreateMenuItem("&Preferences",$mnuToolsMenu) ;Opens the preferences window
 ;$mnuRestart      = GUICtrlCreateMenuItem("Save and Restart",$mnuToolsMenu) ;Saves form and Restart PC
 
-$mnuHelpMenu     = GUICtrlCreateMenu("Help") ;Help Menu  //switched the "?" to "Help" testing git hub tracker and just getting started / ABV 
-$mnuAbout        = GUICtrlCreateMenuItem("About",$mnuHelpMenu) ;Opens about window showing version information
-$mnuHelp         = GUICtrlCreateMenuItem("Help",$mnuHelpMenu) ;Opens help file for assistance using the program
+;$mnuHelpMenu     = GUICtrlCreateMenu("Help") ;Help Menu  //switched the "?" to "Help" testing git hub tracker and just getting started / ABV 
+;$mnuAbout        = GUICtrlCreateMenuItem("About",$mnuHelpMenu) ;Opens about window showing version information
+;$mnuHelp         = GUICtrlCreateMenuItem("Help",$mnuHelpMenu) ;Opens help file for assistance using the program
 
 ; Creates Tabs
 $hTab_1 = GUICtrlCreateTab(5, 5, 700, 190) ; Creates tab group
@@ -135,6 +134,7 @@ GUICtrlCreateTabItem("") ; A blank tab item indicates the end of the tab group
 local $btnMAC = GUICtrlCreateButton("Manual MAC Address",5,200,120,30) ;Button to open cmd prompt, type ipconfig/all, and let you manually check network settings
 local $btnWorkgroup = GUICtrlCreateButton("Change Workgroup",130,200,110,30) ;Button to open advanced computer settings, clicks change so you can manually change workgroup settings
 local $btnAddRemovePrograms = GUICtrlCreateButton("Programs and Features",245,200,130,30) ;Opens Programs and Features to manually uninstall programs
+local $btnExit = GUICtrlCreateButton("X",685,0,25,25)
 
 GUISetState(@SW_SHOW) ;Command to actually display the GUI
 
@@ -142,7 +142,7 @@ While 1
 	Switch GUIGetMsg()
 		Case $GUI_EVENT_CLOSE ;Closes window if program is given close signal
 			Exit ;This Exit command is what actually makes the program exit.
-		Case $mnuExitProgram
+		Case $btnExit ;button to exit the program
 			Exit ;This Exit command is what actually makes the program exit.
 		Case $GUI_EVENT_PRIMARYDOWN
 			_SendMessage($hGUI, $WM_SYSCOMMAND, $SC_DRAGMOVE, 0)
@@ -164,8 +164,8 @@ While 1
 			AddRemovePrograms() ;Opens Add/Remove programs or in vista/7, Programs and features.
 		Case $btnSMARTData ;if this button is clicked
 			Initialize_SMART() ;Opens a new window with SMART information for C: drive
-		Case $mnuPreferences ;if this menu item is clicked
-			CreatePreferencesWindow() ;Creates GUI to set defaults and window preferences
+		;Case $mnuPreferences ;if this menu item is clicked
+			;CreatePreferencesWindow() ;Creates GUI to set defaults and window preferences
 		;Case $mnuRestart ;if this menu item is clicked
 			;SaveTicket() ;Saves current form into ticket file
 			;RestartPC() ;Restarts PC
@@ -173,9 +173,9 @@ While 1
 			;CreateChecklistWindow() ;Creates GUI checklist for walk-in/drop-off procedure
 		;Case $mnuTroubleshoot ;if this menu item is clicked
 			;CreateTroubleshootWindow() ;Creates GUI for network troubleshooting
-		Case $mnuAbout ;if this menu item is clicked
-			CreateAboutWindow($ProgramTitle,$Version,$ReleaseDate) ;Displays program information
-		Case $mnuHelp ;if this menu item is clicked
-			CreateHelpWindow($HelpFile) ;Displays information about how to use software
+		;Case $mnuAbout ;if this menu item is clicked
+			;CreateAboutWindow($ProgramTitle,$Version,$ReleaseDate) ;Displays program information
+		;Case $mnuHelp ;if this menu item is clicked
+			;CreateHelpWindow($HelpFile) ;Displays information about how to use software
 	EndSwitch
 WEnd

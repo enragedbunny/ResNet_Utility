@@ -13,7 +13,7 @@ Func CreatePreferencesWindow()
 	GUICtrlCreateLabel("Default Tech",5,5)
 	GUICtrlCreateCombo("Select Name",85,3,140)
 	Local $DefaultTech = iniRead($ConfigPath,"Preferences","Default_Tech","Select Name")
-	GUICtrlSetData(-1, "Johnny Keeton|Logan Wallen|Zack Smith|CJ Highley|Adam Weintraut|Alex Burgy-Vanhoose|Josh Back|Kia Wallen|Courtney Isaacs|Lisa Moore",$DefaultTech)
+	GUICtrlSetData(-1, "Johnny Keeton|Logan Wallen|Zack Smith|CJ Highley|Alex Burgy-Vanhoose|Josh Back|Kia Wallen|Lisa Moore",$DefaultTech)
 	
 	GUICtrlCreateCheckbox("Autosave ticket when closing program?",5,30)
 	Local $AutoSave = IniRead($ConfigPath,"Preferences","AutoSave_On_Close","NotFound")

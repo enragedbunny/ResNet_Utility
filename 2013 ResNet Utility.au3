@@ -59,50 +59,47 @@ $hTab_1 = GUICtrlCreateTab(5, 5, 700, 190) ; Creates tab group
 GUICtrlCreateTabItem("Info") ;Creating the info tab
 	;Creates labels, to collect system information and present it.
 
-	;Display first two columns (OS, System Type, Service Pack)
-	GUICtrlCreateLabel("Operating System",22,30) ;Heading
-	GUICtrlCreateLabel("OS Edition:",12,52) ;12 is pxels from left, 52, & 
-	GUICtrlCreateLabel("System Type:",12,76) ;76,& ^
-	GUICtrlCreateLabel("Service Pack:",12,100) ;100 are the height^
+	;Display first column (OS, System Type, Service Pack)
+	GUICtrlCreateLabel("OS Edition:",12,30) ; 
+	GUICtrlCreateLabel("System Type:",12,46) ;
+	GUICtrlCreateLabel("Service Pack:",12,62) ;
 
 	;Creates labels to contain data
-	$lblArray[0] = GUICtrlCreateLabel(@OSVersion,83,52) ;OS Edition (Windows 8, Windows 7, Windows Vista)
-	$lblArray[1] = GUICtrlCreateLabel(@OSArch,83,76) ;32 or 64-bit
-	$lblArray[2] = GUICtrlCreateLabel(@OSServicePack,83,100) ;Service pack version installed
+	$lblArray[0] = GUICtrlCreateLabel(@OSVersion,83,30) ;OS Edition (Windows 8, Windows 7, Windows Vista)
+	$lblArray[1] = GUICtrlCreateLabel(@OSArch,83,46) ;32 or 64-bit
+	$lblArray[2] = GUICtrlCreateLabel(@OSServicePack,83,62) ;Service pack version installed
 
 	;Labels for network configuration
-	GUICtrlCreateLabel("Network Hardware",165,30) ;Heading
-	GUICtrlCreateLabel("Wired Brand:",130,52) 
-	GUICtrlCreateLabel("Wired MAC:",130,76)
-	GUICtrlCreateLabel("Wi-Fi Brand:",130,100)
-	GUICtrlCreateLabel("Wi-Fi MAC:",130,124)
+	GUICtrlCreateLabel("Wired Brand:",130,30) 
+	GUICtrlCreateLabel("Wired MAC:",130,46)
+	GUICtrlCreateLabel("Wi-Fi Brand:",130,62)
+	GUICtrlCreateLabel("Wi-Fi MAC:",130,78)
 	;GUICtrlCreateLabel("DM Problems",130,178) ;Add Later, not currently implemented
 
 	;Creates labels to contain data
-	$lblArray[3] = GUICtrlCreateLabel($NetworkSettings[3],200,52,100,12) ;Wired Brand and description
-	$lblArray[4] = GUICtrlCreateLabel($NetworkSettings[4],200,76,100) ;Wired MAC Address
-	$lblArray[5] = GUICtrlCreateLabel($NetworkSettings[1],200,100,100,12) ;Wireless Brand and description
-	$lblArray[6] = GUICtrlCreateLabel($NetworkSettings[2],200,124,100) ;Wireless MAC Address
+	$lblArray[3] = GUICtrlCreateLabel($NetworkSettings[3],200,30,100,12) ;Wired Brand and description
+	$lblArray[4] = GUICtrlCreateLabel($NetworkSettings[4],200,46,100) ;Wired MAC Address
+	$lblArray[5] = GUICtrlCreateLabel($NetworkSettings[1],200,62,100,12) ;Wireless Brand and description
+	$lblArray[6] = GUICtrlCreateLabel($NetworkSettings[2],200,78,100) ;Wireless MAC Address
 	;GUICtrlCreateLabel("xxxx",180,178) ;Add Later, not currently implemented
 
 	;Labels for Vendor information and System Specs
-	GUICtrlCreateLabel("Vendor Information",300,30) ;Heading
-	GUICtrlCreateLabel("Brand:",300,52)
-	GUICtrlCreateLabel("Serial#:",300,76)
-	GUICtrlCreateLabel("HDD:",300,100)
-	GUICtrlCreateLabel("RAM:",300,124)
+	GUICtrlCreateLabel("Brand:",300,30)
+	GUICtrlCreateLabel("Serial#:",300,46)
+	GUICtrlCreateLabel("HDD:",300,62)
+	GUICtrlCreateLabel("RAM:",300,78)
 
 	;Creates labels to contain data
-	$lblArray[7] = GUICtrlCreateLabel($BrandModel[1],340,52,100) ;Computer Manufacturer
-	$lblArray[8] = GUICtrlCreateLabel(GET_Serial_Number($objWMI),340,76,100) ;Serial Number
-	$lblArray[9] = GUICtrlCreateLabel(GET_HDD_Total_and_Free($objWMI),340,100,100,12) ;Hard drive total and free space
-	$lblArray[10] = GUICtrlCreateLabel(GET_Total_RAM($objWMI),340,124,100) ;Total RAM on system
+	$lblArray[7] = GUICtrlCreateLabel($BrandModel[1],340,30,100) ;Computer Manufacturer
+	$lblArray[8] = GUICtrlCreateLabel(GET_Serial_Number($objWMI),340,46,100) ;Serial Number
+	$lblArray[9] = GUICtrlCreateLabel(GET_HDD_Total_and_Free($objWMI),340,62,100,12) ;Hard drive total and free space
+	$lblArray[10] = GUICtrlCreateLabel(GET_Total_RAM($objWMI),340,78,100) ;Total RAM on system
 
 	;Label for Model
-	GUICtrlCreateLabel("Model:",450,52)
+	GUICtrlCreateLabel("Model:",450,30)
 
 	;Data
-	$lblArray[11] = GUICtrlCreateLabel($BrandModel[2],490,52,100,12) ;Model Number
+	$lblArray[11] = GUICtrlCreateLabel($BrandModel[2],490,30,100,12) ;Model Number
 
 
 	;Group for alerts

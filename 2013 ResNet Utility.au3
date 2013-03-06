@@ -11,6 +11,7 @@
 ;              Examples:    $ThisIsAVariable $MACAddressVariable, etc
 #include <EditConstants.au3> ;For the Tech Notes Box
 #include <GuiConstantsEx.au3> ; This file is provided after installing Autoit, and provides the ability to use GUI environment.
+#include <StaticConstants.au3>; Used for some gui variables (atleast $SS_BLACKRECT)
 #include <WindowsConstants.au3> ; Import variables for tweaking UI. Used to remove borders on GUI and potentially other things.
 #include <SendMessage.au3> ;Import ability to send a window a command (Used to move GUI with no borders)
 #include <ComboConstants.au3> ;For Combo Boxes
@@ -26,12 +27,12 @@ local $ProgramTitle = "ResNet Utility"
 local $Version = "0.3.1" ; Current version of the software
 local $ReleaseDate = "2012.11.2"
 local $HelpFile = "README.txt"
-local $lblArray[12] ;Used to set color for data labels in a loop.
+local $lblArray[13] ;Used to set color for data labels in a loop.
 Global Const $SC_DRAGMOVE = 0xF012 ;Used for moving the GUI with no borders
 
 ; Creates GUI, sets name in title bar and icon.
 local $hGUI = GUICreate("ResNet Utility " & $Version, 710, 235,((@DesktopWidth - 710)/2),((@DesktopHeight - 235)/2),$WS_POPUP) ;Created the GUI form and the size. Sets position to center of screen.
-GUISetIcon("ResNet.ico", 0) ;Sets the icon for the window title bar (Should be in the same directory as this file, with this name!)
+GUISetIcon("icon.ico", 0) ;Sets the icon for the window title bar (Should be in the same directory as this file, with this name!)
 
 local $objWMI = ObjGet("winmgmts:\\localhost\root\CIMV2") ;Create connection to WMI
 
@@ -60,46 +61,48 @@ GUICtrlCreateTabItem("Info") ;Creating the info tab
 	;Creates labels, to collect system information and present it.
 
 	;Display first column (OS, System Type, Service Pack)
-	GUICtrlCreateLabel("OS Edition:",12,30) ; 
-	GUICtrlCreateLabel("System Type:",12,46) ;
-	GUICtrlCreateLabel("Service Pack:",12,62) ;
+	GUICtrlCreateLabel("OS Edition:",12,30) ; OS Edition Label
+	GUICtrlCreateLabel("System Type:",12,46) ; System type label
+	GUICtrlCreateLabel("Service Pack:",12,62) ;Service Pack label
+	GUICtrlCreateLabel("Comp Name:",12,78) ;Workgroup Label
 
 	;Creates labels to contain data
 	$lblArray[0] = GUICtrlCreateLabel(@OSVersion,83,30) ;OS Edition (Windows 8, Windows 7, Windows Vista)
 	$lblArray[1] = GUICtrlCreateLabel(@OSArch,83,46) ;32 or 64-bit
 	$lblArray[2] = GUICtrlCreateLabel(@OSServicePack,83,62) ;Service pack version installed
+	$lblArray[3] = GUICtrlCreateLabel(@ComputerName,83,78)
+
 
 	;Labels for network configuration
-	GUICtrlCreateLabel("Wired Brand:",130,30) 
-	GUICtrlCreateLabel("Wired MAC:",130,46)
-	GUICtrlCreateLabel("Wi-Fi Brand:",130,62)
-	GUICtrlCreateLabel("Wi-Fi MAC:",130,78)
+	GUICtrlCreateLabel("Wired Brand:",170,30) 
+	GUICtrlCreateLabel("Wired MAC:",170,46)
+	GUICtrlCreateLabel("Wi-Fi Brand:",170,62)
+	GUICtrlCreateLabel("Wi-Fi MAC:",170,78)
 	;GUICtrlCreateLabel("DM Problems",130,178) ;Add Later, not currently implemented
 
 	;Creates labels to contain data
-	$lblArray[3] = GUICtrlCreateLabel($NetworkSettings[3],200,30,100,12) ;Wired Brand and description
-	$lblArray[4] = GUICtrlCreateLabel($NetworkSettings[4],200,46,100) ;Wired MAC Address
-	$lblArray[5] = GUICtrlCreateLabel($NetworkSettings[1],200,62,100,12) ;Wireless Brand and description
-	$lblArray[6] = GUICtrlCreateLabel($NetworkSettings[2],200,78,100) ;Wireless MAC Address
+	$lblArray[4] = GUICtrlCreateLabel($NetworkSettings[3],240,30,100,12) ;Wired Brand and description
+	$lblArray[5] = GUICtrlCreateLabel($NetworkSettings[4],240,46,100) ;Wired MAC Address
+	$lblArray[6] = GUICtrlCreateLabel($NetworkSettings[1],240,62,100,12) ;Wireless Brand and description
+	$lblArray[7] = GUICtrlCreateLabel($NetworkSettings[2],240,78,100) ;Wireless MAC Address
 	;GUICtrlCreateLabel("xxxx",180,178) ;Add Later, not currently implemented
 
 	;Labels for Vendor information and System Specs
-	GUICtrlCreateLabel("Brand:",300,30)
-	GUICtrlCreateLabel("Serial#:",300,46)
-	GUICtrlCreateLabel("HDD:",300,62)
-	GUICtrlCreateLabel("RAM:",300,78)
+	GUICtrlCreateLabel("Brand:",340,30)
+	GUICtrlCreateLabel("Model:",444,30)
+	GUICtrlCreateLabel("Serial#:",340,46)
+	GUICtrlCreateLabel("HDD:",340,62)
+	GUICtrlCreateLabel("RAM:",340,78)
 
 	;Creates labels to contain data
-	$lblArray[7] = GUICtrlCreateLabel($BrandModel[1],340,30,100) ;Computer Manufacturer
-	$lblArray[8] = GUICtrlCreateLabel(GET_Serial_Number($objWMI),340,46,100) ;Serial Number
-	$lblArray[9] = GUICtrlCreateLabel(GET_HDD_Total_and_Free($objWMI),340,62,100,12) ;Hard drive total and free space
-	$lblArray[10] = GUICtrlCreateLabel(GET_Total_RAM($objWMI),340,78,100) ;Total RAM on system
+	$lblArray[8] = GUICtrlCreateLabel($BrandModel[1],380,30,60) ;Computer Manufacturer
+	$lblArray[9] = GUICtrlCreateLabel($BrandModel[2],479,30,100,12) ;Model Number
+	$lblArray[10] = GUICtrlCreateLabel(GET_Serial_Number($objWMI),380,46,100) ;Serial Number
+	$lblArray[11] = GUICtrlCreateLabel(GET_HDD_Total_and_Free($objWMI),380,62,100,12) ;Hard drive total and free space
+	$lblArray[12] = GUICtrlCreateLabel(GET_Total_RAM($objWMI),380,78,100) ;Total RAM on system
 
-	;Label for Model
-	GUICtrlCreateLabel("Model:",450,30)
-
-	;Data
-	$lblArray[11] = GUICtrlCreateLabel($BrandModel[2],490,30,100,12) ;Model Number
+	;Create horizontal line to separate data
+	GUICtrlCreateGraphic(12,99,398,1,$SS_BLACKRECT)
 
 
 	;Group for alerts
@@ -111,7 +114,7 @@ GUICtrlCreateTabItem("Info") ;Creating the info tab
    
 	local $i ;declares variable for loop
 	If IsArray($lblArray) Then ;Makes sure the array was created correctly
-		For $i = 0 to 11 ;Loops through the data labels (created as array previously)
+		For $i = 0 to 12 ;Loops through the data labels (created as array previously)
 			GUICtrlSetColor($lblArray[$i],0x0000FF) ;Sets the color of the text for 'data' in the GUI to blue
 		Next
 	EndIf

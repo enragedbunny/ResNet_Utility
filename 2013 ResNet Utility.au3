@@ -36,6 +36,11 @@ GUISetIcon("icon.ico", 0) ;Sets the icon for the window title bar (Should be in 
 
 local $objWMI = ObjGet("winmgmts:\\localhost\root\CIMV2") ;Create connection to WMI
 local $objSecWMI = ObjGet("winmgmts:\\localhost\root\SecurityCenter2")
+If IsObj($objWMI) = 0 OR IsObj($objSecWMI) = 0 Then
+	MsgBox(1,"WMI Error","One of the WMI objects was not gotten successfully. Lines 37,38. $objWMI is " + IsObj($objWMI) + "$objSecWMI is " + IsObj($objSecWMI) + ". Values of 1 are successful, values of 0 are not.") ;Creates a message box to inform user something went wrong with WMI collection and gives line references and status of each variable.
+	WinWaitClose("WMI Error") ;Waits for the window to be closed so the program can exit
+	Exit
+EndIf
 
 ;The following rows parse data into arrays for easier use.
 local $BrandModel = stringsplit(GET_Manufacturer_and_Model($objWMI),"|") ;Values are as follows (Computer Manufacturer, Model Number)

@@ -121,3 +121,18 @@ Func GET_Workgroup($objWMI) ; Takes WMI object as input, returns Local System's 
 		Next
 	EndIf
 EndFunc
+
+Func GET_Antivirus($objSecWMI) ; Takes WMI security object as input, returns list of antivirus products installed
+	local $objItems = $objSecWMI.ExecQuery("SELECT * FROM AntiVirusProduct", "WQL", 0x10 + 0x20) ; query WMI to retrieve AntiVirusProduct
+	local $sAntivirusList = ""
+	If IsObj($objItems) Then ; checks to see that the query returned usable results
+		For $objItem In $objItems ;for each item in the returned query
+			If $sAntivirusList = "" Then
+				$sAntivirusList = $objItem.displayName
+			Else
+				$sAntivirusList = $sAntivirusList & ", " & $objItem.displayName
+			EndIf
+		Next
+		Return $sAntivirusList
+	EndIf
+EndFunc

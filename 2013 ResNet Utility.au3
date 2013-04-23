@@ -27,7 +27,7 @@ local $ProgramTitle = "ResNet Utility"
 local $Version = "0.3.1" ; Current version of the software
 local $ReleaseDate = "2012.11.2"
 local $HelpFile = "README.txt"
-local $lblArray[13] ;Used to set color for data labels in a loop.
+local $lblArray[14] ;Used to set color for data labels in a loop.
 Global Const $SC_DRAGMOVE = 0xF012 ;Used for moving the GUI with no borders
 
 ; Creates GUI, sets name in title bar and icon.
@@ -35,6 +35,7 @@ local $hGUI = GUICreate("ResNet Utility " & $Version, 710, 235,((@DesktopWidth -
 GUISetIcon("icon.ico", 0) ;Sets the icon for the window title bar (Should be in the same directory as this file, with this name!)
 
 local $objWMI = ObjGet("winmgmts:\\localhost\root\CIMV2") ;Create connection to WMI
+local $objSecWMI = ObjGet("winmgmts:\\localhost\root\SecurityCenter2")
 
 ;The following rows parse data into arrays for easier use.
 local $BrandModel = stringsplit(GET_Manufacturer_and_Model($objWMI),"|") ;Values are as follows (Computer Manufacturer, Model Number)
@@ -101,6 +102,10 @@ GUICtrlCreateTabItem("Info") ;Creating the info tab
 	$lblArray[11] = GUICtrlCreateLabel(GET_HDD_Total_and_Free($objWMI),380,62,100,12) ;Hard drive total and free space
 	$lblArray[12] = GUICtrlCreateLabel(GET_Total_RAM($objWMI),380,78,100) ;Total RAM on system
 
+	GUICtrlCreateLabel("Antivirus:",12,107)
+
+	$lblArray[13] = GUICtrlCreateLabel(GET_Antivirus($objSecWMI),83,107)
+
 	;Create horizontal line to separate data
 	GUICtrlCreateGraphic(12,99,398,1,$SS_BLACKRECT)
 
@@ -114,7 +119,7 @@ GUICtrlCreateTabItem("Info") ;Creating the info tab
    
 	local $i ;declares variable for loop
 	If IsArray($lblArray) Then ;Makes sure the array was created correctly
-		For $i = 0 to 12 ;Loops through the data labels (created as array previously)
+		For $i = 0 to 13 ;Loops through the data labels (created as array previously)
 			GUICtrlSetColor($lblArray[$i],0x0000FF) ;Sets the color of the text for 'data' in the GUI to blue
 		Next
 	EndIf

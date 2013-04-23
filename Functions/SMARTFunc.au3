@@ -82,7 +82,6 @@ Func _GetSmartData($vDrive  = "C:") ;optional Parameter $vDrive is = C: by defau
 			local $strVendorSpecific4 = $objItem.VendorSpecific4
 			ConsoleWrite ("VendorSpecific4: " & _ArrayToString($strVendorSpecific4,",")&@CR)
 		Else
-
 			$iCnt +=1 ; increases the counter
 		EndIf
 
